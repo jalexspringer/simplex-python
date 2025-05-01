@@ -1,7 +1,7 @@
 [project]
-name = "simplexbot"
+name = "simplex-python"
 version = "0.1.0"
-description = "A bot framework using websockets for Simplex Chat"
+description = "A python SDK using websockets for Simplex Chat"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [

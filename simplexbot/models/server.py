@@ -8,7 +8,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Optional
-from ..commands.base import ServerProtocol
 
 
 @dataclass(kw_only=True)

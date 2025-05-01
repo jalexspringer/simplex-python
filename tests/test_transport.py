@@ -24,6 +24,7 @@ from simplexbot.transport import (
     delay,
     with_timeout,
 )
+from simplexbot.commands.user import ShowActiveUser
 
 
 class DummyWebSocket:
@@ -136,19 +137,20 @@ async def test_chat_transport_write_and_read():
 
     ws = DummyWS()
     ct = ChatTransport(ws, timeout=1.0, qsize=5)
-    # Use new-style command dict with 'type' field
-    req = {"type": "showActiveUser", "corr_id": "cid"}
+    # Use new-style command instance with 'type' field
+    req = ShowActiveUser()
     await ct.write(req)
     sent = ws.sent[0]
     sent_obj = json.loads(sent)
-    assert sent_obj["corrId"] == "cid"
+    # Correlation ID is assigned by transport, so just check it exists
+    assert "corrId" in sent_obj
     assert sent_obj["cmd"] == "/u"
     # Simulate server response
-    resp_json = json.dumps({"corrId": "cid", "resp": {"ok": True}})
+    resp_json = json.dumps({"corrId": sent_obj["corrId"], "resp": {"ok": True}})
     await ws._recv_queue.put(resp_json)
     resp = await ct.read()
     assert isinstance(resp, ChatSrvResponse)
-    assert resp.corr_id == "cid"
+    assert resp.corr_id == sent_obj["corrId"]
     assert resp.resp["ok"] is True
     await ct.close()
     assert ws.closed

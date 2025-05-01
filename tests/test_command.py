@@ -200,7 +200,8 @@ def test_api_get_chats_and_chat():
 
 
 def test_msg_content_and_composed_message():
-    mc = MsgContent(type="text", text="hello")
+    from simplexbot.models.message import MCText, ComposedMessage
+    mc = MCText(text="hello")
     cm = ComposedMessage(msg_content=mc, file_path="/file.txt", quoted_item_id=5)
     assert cm.msg_content.type == "text"
     assert cm.file_path == "/file.txt"
@@ -208,7 +209,9 @@ def test_msg_content_and_composed_message():
 
 
 def test_api_send_message_and_update_chat_item():
-    mc = MsgContent(type="text", text="hi")
+    from simplexbot.models.message import MCText
+    mc = MCText(text="hi")
+    from simplexbot.models.message import ComposedMessage
     cm = ComposedMessage(msg_content=mc)
     send = APISendMessage(chat_type=ChatType.DIRECT, chat_id=1, messages=[cm])
     update = APIUpdateChatItem(

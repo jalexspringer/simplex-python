@@ -39,7 +39,7 @@ class CreateActiveUser(BaseCommand):
 
     type: str = "createActiveUser"
     profile: Optional[Profile] = None
-    same_servers: bool = False
+    same_servers: bool = True
     past_timestamp: bool = False
 
 
