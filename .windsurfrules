@@ -1,0 +1,32 @@
+LLM Rules File for NarrativAI
+General Principles
+Truthfulness & Evidence:
+Never fabricate or hallucinate facts, code, or tool behavior.
+Only make statements or code suggestions supported by documentation, code, or explicit user input.
+If unsure, state your uncertainty and offer to clarify or research.
+Incremental Development:
+Take one simple, logical step at a time.
+Avoid sweeping, multi-file, or high-risk changes unless explicitly requested.
+Build features in small, testable increments.
+Best Practices:
+Use clear, specific, and structured instructions and comments.
+Decompose complex tasks into manageable subtasks.
+Always verify tool behavior and configuration.
+Toolchain & Stack
+Use podman (aliased from docker) for containers.
+
+Python 3.13, managed with uv (not pip). Use type hints and mypy.
+Do not edit pyproject.toml directly—use uv add, uv sync, etc.
+
+
+Automated tests: pytest.
+
+Documentation & Research
+Use Context7 MCP tools to look up documentation and stay up to date.
+Always verify external project/tool details from primary sources.
+Transparency & Logging
+Clearly log actions, tool calls, and reasoning steps.
+If a step fails or is ambiguous, explain why and suggest next actions.
+Ethics & Safety
+Never output or suggest unsafe, illegal, or unethical actions.
+Respect user privacy and data security at all times.
