@@ -214,7 +214,7 @@ class ChatTransport(Transport[object, ChatSrvResponse]):
             raise TypeError(f"Unsupported command type: {type(req)}")
 
         # Convert to protocol string
-        cmd_str = cmd_string(cmd_dict)
+        cmd_str = cmd_string(req)
         payload = {"corrId": corr_id, "cmd": cmd_str}
         data = json.dumps(payload)
         print(f"[DEBUG] Sending command envelope: {data}")
