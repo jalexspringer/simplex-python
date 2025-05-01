@@ -4,129 +4,15 @@ Utilities for Simplex Python client.
 Includes protocol command stringification for parity with the TypeScript client.
 """
 
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional
 import json
 from dataclasses import asdict
 
-# Import all command types to handle them properly
-from .command import (
-    # Enum types
-    ChatType,
-    DeleteMode,
-    GroupMemberRole,
-    # Command classes
-    ShowActiveUser,
-    CreateActiveUser,
-    ListUsers,
-    APISetActiveUser,
-    APIHideUser,
-    APIUnhideUser,
-    APIMuteUser,
-    APIUnmuteUser,
-    APIDeleteUser,
-    StartChat,
-    APIStopChat,
-    SetTempFolder,
-    SetFilesFolder,
-    SetIncognito,
-    APIExportArchive,
-    APIImportArchive,
-    APIDeleteStorage,
-    APIGetChats,
-    APIGetChat,
-    APISendMessage,
-    APIUpdateChatItem,
-    APIDeleteChatItem,
-    APIDeleteMemberChatItem,
-    APIChatRead,
-    APIDeleteChat,
-    APIClearChat,
-    APIAcceptContact,
-    APIRejectContact,
-    APIUpdateProfile,
-    APISetContactAlias,
-    NewGroup,
-    APIAddMember,
-    APIJoinGroup,
-    APIRemoveMember,
-    APILeaveGroup,
-    APIListMembers,
-    APIUpdateGroupProfile,
-    APICreateGroupLink,
-    APIGroupLinkMemberRole,
-    APIDeleteGroupLink,
-    APIGetGroupLink,
-    APIVerifyContact,
-    APIVerifyGroupMember,
-    CreateMyAddress,
-    DeleteMyAddress,
-    ShowMyAddress,
-    SetProfileAddress,
-    AddressAutoAccept,
-    ReceiveFile,
-    CancelFile,
-    FileStatus,
-    ChatPagination,
-    ArchiveConfig,
-    Profile,
-    GroupProfile,
-)
-
-# Type representing any command
-define_ChatCommand = Union[
-    ShowActiveUser,
-    CreateActiveUser,
-    ListUsers,
-    APISetActiveUser,
-    APIHideUser,
-    APIUnhideUser,
-    APIMuteUser,
-    APIUnmuteUser,
-    APIDeleteUser,
-    StartChat,
-    APIStopChat,
-    SetTempFolder,
-    SetFilesFolder,
-    SetIncognito,
-    APIExportArchive,
-    APIImportArchive,
-    APIDeleteStorage,
-    APIGetChats,
-    APIGetChat,
-    APISendMessage,
-    APIUpdateChatItem,
-    APIDeleteChatItem,
-    APIDeleteMemberChatItem,
-    APIChatRead,
-    APIDeleteChat,
-    APIClearChat,
-    APIAcceptContact,
-    APIRejectContact,
-    APIUpdateProfile,
-    APISetContactAlias,
-    NewGroup,
-    APIAddMember,
-    APIJoinGroup,
-    APIRemoveMember,
-    APILeaveGroup,
-    APIListMembers,
-    APIUpdateGroupProfile,
-    APICreateGroupLink,
-    APIGroupLinkMemberRole,
-    APIDeleteGroupLink,
-    APIGetGroupLink,
-    APIVerifyContact,
-    APIVerifyGroupMember,
-    CreateMyAddress,
-    DeleteMyAddress,
-    ShowMyAddress,
-    SetProfileAddress,
-    AddressAutoAccept,
-    ReceiveFile,
-    CancelFile,
-    FileStatus,
-]
-ChatCommand = define_ChatCommand  # for type checking
+# Import all command types
+from .command import ChatCommand
+from .commands.base import ChatType, DeleteMode, GroupMemberRole, ServerProtocol
+from .models.pagination import ChatPagination
+from .models.archive import AutoAccept
 
 
 def on_off(value: Optional[bool]) -> str:
@@ -200,7 +86,9 @@ def cmd_string(cmd: ChatCommand) -> str:
             return f"/_user {cmd_dict['user_id']}{maybe_json(cmd_dict.get('view_pwd'))}"
 
         case "apiHideUser":
-            return f"/_hide user {cmd_dict['user_id']} {json.dumps(cmd_dict['view_pwd'])}"
+            return (
+                f"/_hide user {cmd_dict['user_id']} {json.dumps(cmd_dict['view_pwd'])}"
+            )
 
         case "apiUnhideUser":
             return f"/_unhide user {cmd_dict['user_id']} {json.dumps(cmd_dict['view_pwd'])}"
@@ -242,57 +130,77 @@ def cmd_string(cmd: ChatCommand) -> str:
             return f"/_get chats pcc={on_off(cmd_dict.get('pending_connections'))}"
 
         case "apiGetChat":
+            chat_type_value = (
+                cmd_dict["chat_type"].value
+                if isinstance(cmd_dict["chat_type"], ChatType)
+                else cmd_dict["chat_type"]
+            )
             pagination = cmd_dict["pagination"]
-            pagination_string = ""
-            if isinstance(pagination, dict):
-                if "after" in pagination:
-                    pagination_string = (
-                        f" after={pagination['after']} count={pagination['count']}"
-                    )
-                elif "before" in pagination:
-                    pagination_string = (
-                        f" before={pagination['before']} count={pagination['count']}"
-                    )
-                else:
-                    pagination_string = f" count={pagination['count']}"
-            else:
-                # ChatPagination object already converted to dict via asdict
-                if pagination.get("after"):
-                    pagination_string = (
-                        f" after={pagination['after']} count={pagination['count']}"
-                    )
-                elif pagination.get("before"):
-                    pagination_string = (
-                        f" before={pagination['before']} count={pagination['count']}"
-                    )
-                else:
-                    pagination_string = f" count={pagination['count']}"
-            return f"/_get chat {cmd_dict['chat_type'].value}{cmd_dict['chat_id']}{pagination_string}"
+            pagination_string = (
+                pagination_str(pagination) if hasattr(pagination, "count") else ""
+            )
+            return (
+                f"/_get chat {chat_type_value}{cmd_dict['chat_id']}{pagination_string}"
+            )
 
         case "apiSendMessage":
-            return f"/_send {cmd_dict['chat_type'].value}{cmd_dict['chat_id']} json {json.dumps(cmd_dict['messages'])}"
+            chat_type_value = (
+                cmd_dict["chat_type"].value
+                if isinstance(cmd_dict["chat_type"], ChatType)
+                else cmd_dict["chat_type"]
+            )
+            return f"/_send {chat_type_value}{cmd_dict['chat_id']} json {json.dumps(cmd_dict['messages'])}"
 
         case "apiUpdateChatItem":
-            return f"/_update item {cmd_dict['chat_type'].value}{cmd_dict['chat_id']} {cmd_dict['chat_item_id']} json {json.dumps(cmd_dict['msg_content'])}"
+            chat_type_value = (
+                cmd_dict["chat_type"].value
+                if isinstance(cmd_dict["chat_type"], ChatType)
+                else cmd_dict["chat_type"]
+            )
+            return f"/_update item {chat_type_value}{cmd_dict['chat_id']} {cmd_dict['chat_item_id']} json {json.dumps(cmd_dict['msg_content'])}"
 
         case "apiDeleteChatItem":
-            return f"/_delete item {cmd_dict['chat_type'].value}{cmd_dict['chat_id']} {cmd_dict['chat_item_id']} {cmd_dict['delete_mode'].value}"
+            chat_type_value = (
+                cmd_dict["chat_type"].value
+                if isinstance(cmd_dict["chat_type"], ChatType)
+                else cmd_dict["chat_type"]
+            )
+            delete_mode_value = (
+                cmd_dict["delete_mode"].value
+                if isinstance(cmd_dict["delete_mode"], DeleteMode)
+                else cmd_dict["delete_mode"]
+            )
+            return f"/_delete item {chat_type_value}{cmd_dict['chat_id']} {cmd_dict['chat_item_id']} {delete_mode_value}"
 
         case "apiDeleteMemberChatItem":
             return f"/_delete member item #{cmd_dict['group_id']} {cmd_dict['group_member_id']} {cmd_dict['item_id']}"
 
         case "apiChatRead":
+            chat_type_value = (
+                cmd_dict["chat_type"].value
+                if isinstance(cmd_dict["chat_type"], ChatType)
+                else cmd_dict["chat_type"]
+            )
             item_range = ""
             if cmd_dict.get("item_range"):
-                from_item, to_item = cmd_dict["item_range"]
-                item_range = f" from={from_item} to={to_item}"
-            return f"/_read chat {cmd_dict['chat_type'].value}{cmd_dict['chat_id']}{item_range}"
+                item_range = f" from={cmd_dict['item_range']['from_item']} to={cmd_dict['item_range']['to_item']}"
+            return f"/_read chat {chat_type_value}{cmd_dict['chat_id']}{item_range}"
 
         case "apiDeleteChat":
-            return f"/_delete {cmd_dict['chat_type'].value}{cmd_dict['chat_id']}"
+            chat_type_value = (
+                cmd_dict["chat_type"].value
+                if isinstance(cmd_dict["chat_type"], ChatType)
+                else cmd_dict["chat_type"]
+            )
+            return f"/_delete {chat_type_value}{cmd_dict['chat_id']}"
 
         case "apiClearChat":
-            return f"/_clear chat {cmd_dict['chat_type'].value}{cmd_dict['chat_id']}"
+            chat_type_value = (
+                cmd_dict["chat_type"].value
+                if isinstance(cmd_dict["chat_type"], ChatType)
+                else cmd_dict["chat_type"]
+            )
+            return f"/_clear chat {chat_type_value}{cmd_dict['chat_id']}"
 
         case "apiAcceptContact":
             return f"/_accept {cmd_dict['contact_req_id']}"
@@ -304,15 +212,18 @@ def cmd_string(cmd: ChatCommand) -> str:
             return f"/_profile {cmd_dict['user_id']} {json.dumps(cmd_dict['profile'])}"
 
         case "apiSetContactAlias":
-            return (
-                f"/_set alias @{cmd_dict['contact_id']} {cmd_dict['local_alias'].strip()}"
-            )
+            return f"/_set alias @{cmd_dict['contact_id']} {cmd_dict['local_alias'].strip()}"
 
         case "newGroup":
             return f"/_group {json.dumps(cmd_dict['group_profile'])}"
 
         case "apiAddMember":
-            return f"/_add #{cmd_dict['group_id']} {cmd_dict['contact_id']} {cmd_dict['member_role'].value}"
+            member_role_value = (
+                cmd_dict["member_role"].value
+                if isinstance(cmd_dict["member_role"], GroupMemberRole)
+                else cmd_dict["member_role"]
+            )
+            return f"/_add #{cmd_dict['group_id']} {cmd_dict['contact_id']} {member_role_value}"
 
         case "apiJoinGroup":
             return f"/_join #{cmd_dict['group_id']}"
@@ -330,12 +241,20 @@ def cmd_string(cmd: ChatCommand) -> str:
             return f"/_group_profile #{cmd_dict['group_id']} {json.dumps(cmd_dict['group_profile'])}"
 
         case "apiCreateGroupLink":
-            return f"/_create link #{cmd_dict['group_id']} {cmd_dict['member_role'].value}"
+            member_role_value = (
+                cmd_dict["member_role"].value
+                if isinstance(cmd_dict["member_role"], GroupMemberRole)
+                else cmd_dict["member_role"]
+            )
+            return f"/_create link #{cmd_dict['group_id']} {member_role_value}"
 
         case "apiGroupLinkMemberRole":
-            return (
-                f"/_set link role #{cmd_dict['group_id']} {cmd_dict['member_role'].value}"
+            member_role_value = (
+                cmd_dict["member_role"].value
+                if isinstance(cmd_dict["member_role"], GroupMemberRole)
+                else cmd_dict["member_role"]
             )
+            return f"/_set link role #{cmd_dict['group_id']} {member_role_value}"
 
         case "apiDeleteGroupLink":
             return f"/_delete link #{cmd_dict['group_id']}"
@@ -348,6 +267,43 @@ def cmd_string(cmd: ChatCommand) -> str:
 
         case "apiVerifyGroupMember":
             return f"/_verify code #{cmd_dict['group_id']} {cmd_dict['group_member_id']}{maybe(cmd_dict.get('connection_code'))}"
+
+        case "apiGetUserProtoServers":
+            protocol_value = (
+                cmd_dict["server_protocol"].value
+                if isinstance(cmd_dict["server_protocol"], ServerProtocol)
+                else cmd_dict["server_protocol"]
+            )
+            return f"/_servers {cmd_dict['user_id']} {protocol_value}"
+
+        case "apiSetUserProtoServers":
+            protocol_value = (
+                cmd_dict["server_protocol"].value
+                if isinstance(cmd_dict["server_protocol"], ServerProtocol)
+                else cmd_dict["server_protocol"]
+            )
+            return f"/_servers {cmd_dict['user_id']} {protocol_value} {json.dumps({'servers': cmd_dict['servers']})}"
+
+        case "apiContactInfo":
+            return f"/_info @{cmd_dict['contact_id']}"
+
+        case "apiGroupMemberInfo":
+            return f"/_info #{cmd_dict['group_id']} {cmd_dict['member_id']}"
+
+        case "apiGetContactCode":
+            return f"/_get code @{cmd_dict['contact_id']}"
+
+        case "apiGetGroupMemberCode":
+            return f"/_get code #{cmd_dict['group_id']} {cmd_dict['group_member_id']}"
+
+        case "addContact":
+            return "/connect"
+
+        case "connect":
+            return f"/connect {cmd_dict['conn_req']}"
+
+        case "connectSimplex":
+            return "/simplex"
 
         case "createMyAddress":
             return "/address"
@@ -362,15 +318,40 @@ def cmd_string(cmd: ChatCommand) -> str:
             return f"/profile_address {on_off(cmd_dict['include_in_profile'])}"
 
         case "addressAutoAccept":
-            # Accepts dict or bool for auto_accept; handle both
+            # Accepts dict or object for auto_accept; handle both
             auto_accept = cmd_dict.get("auto_accept")
             if isinstance(auto_accept, dict):
                 return f"/auto_accept {auto_accept_str(auto_accept)}"
-            return f"/auto_accept {on_off(auto_accept)}"
+            elif auto_accept:
+                return f"/auto_accept {auto_accept_str(asdict(auto_accept))}"
+            return "/auto_accept off"
+
+        case "apiCreateMyAddress":
+            return f"/_address {cmd_dict['user_id']}"
+
+        case "apiDeleteMyAddress":
+            return f"/_delete_address {cmd_dict['user_id']}"
+
+        case "apiShowMyAddress":
+            return f"/_show_address {cmd_dict['user_id']}"
+
+        case "apiSetProfileAddress":
+            return f"/_profile_address {cmd_dict['user_id']} {on_off(cmd_dict['include_in_profile'])}"
+
+        case "apiAddressAutoAccept":
+            # Accepts dict or object for auto_accept; handle both
+            auto_accept = cmd_dict.get("auto_accept")
+            if isinstance(auto_accept, dict):
+                return f"/_auto_accept {cmd_dict['user_id']} {auto_accept_str(auto_accept)}"
+            elif auto_accept:
+                return f"/_auto_accept {cmd_dict['user_id']} {auto_accept_str(asdict(auto_accept))}"
+            return f"/_auto_accept {cmd_dict['user_id']} off"
 
         case "receiveFile":
             file_path = cmd_dict.get("file_path", "")
-            return f"/freceive {cmd_dict['file_id']}{' ' + file_path if file_path else ''}"
+            return (
+                f"/freceive {cmd_dict['file_id']}{' ' + file_path if file_path else ''}"
+            )
 
         case "cancelFile":
             return f"/fcancel {cmd_dict['file_id']}"
