@@ -1,7 +1,6 @@
 """
-Async Bounded Queue (ABQueue) for simplexbot
-Ported from TypeScript src/queue.ts
-Refactored for Python 3.13+ idioms (PEP 695 generics, context manager, RuntimeError)
+Async Bounded Queue (ABQueue) for simplex_python
+
 """
 
 import asyncio

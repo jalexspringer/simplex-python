@@ -16,15 +16,15 @@ A modern, async-first Python client for the SimpleX Chat protocol. This project 
 ## Installation
 
 ```bash
-pip install simplex-python-sdk
+pip install simplex_python-sdk
 ```
 
 ## Quick Start
 
 ```python
 import asyncio
-from simplexbot.client import SimplexClient
-from simplexbot.command import ShowActiveUser, StartChat, Profile, APISetActiveUser
+from simplex_python.client import SimplexClient
+from simplex_python.command import ShowActiveUser, StartChat, Profile, APISetActiveUser
 
 async def main():
     # Connect to a SimpleX chat server
@@ -55,13 +55,13 @@ if __name__ == "__main__":
 The primary interface for interacting with SimpleX Chat servers:
 
 ```python
-from simplexbot.client import SimplexClient
+from simplex_python.client import SimplexClient
 
 # Connect using a URL
 client = SimplexClient("ws://localhost:5225")
 
 # Or use a server object
-from simplexbot.transport import ChatServer
+from simplex_python.transport import ChatServer
 server = ChatServer(host="localhost", port="5225")
 client = SimplexClient(server)
 
@@ -76,7 +76,7 @@ async with SimplexClient("ws://localhost:5225") as client:
 The SDK provides dataclasses for all SimpleX Chat commands:
 
 ```python
-from simplexbot.command import (
+from simplex_python.command import (
     ShowActiveUser,
     CreateActiveUser,
     APISetActiveUser,
@@ -112,7 +112,7 @@ send_cmd = APISendMessage(
 Responses from the server are typed with appropriate dataclasses:
 
 ```python
-from simplexbot.response import (
+from simplex_python.response import (
     CRActiveUser,
     CRChatStarted,
     CRNewChatItems
@@ -144,7 +144,7 @@ The SDK uses a layered approach to communication:
 You can access the transport directly if needed:
 
 ```python
-from simplexbot.transport import ChatTransport, ChatServer
+from simplex_python.transport import ChatTransport, ChatServer
 
 server = ChatServer(host="localhost", port="5225")
 transport = await ChatTransport.connect(server)
@@ -159,7 +159,7 @@ response = await transport.read()
 The SDK includes a robust async bounded queue implementation:
 
 ```python
-from simplexbot.queue import ABQueue
+from simplex_python.queue import ABQueue
 
 # Create a bounded queue with max size
 queue = ABQueue[str](100)
@@ -183,9 +183,9 @@ await queue.close()
 The SDK provides various error types for proper exception handling:
 
 ```python
-from simplexbot.client import SimplexClientError
-from simplexbot.transport import TransportError
-from simplexbot.queue import ABQueueError
+from simplex_python.client import SimplexClientError
+from simplex_python.transport import TransportError
+from simplex_python.queue import ABQueueError
 
 try:
     await client.send_command(cmd, timeout=5.0)

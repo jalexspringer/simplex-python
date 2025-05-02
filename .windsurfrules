@@ -1,13 +1,17 @@
 LLM Rules File for NarrativAI
+Simple and explicit is better than convoluted and implicit!
+
 General Principles
 Truthfulness & Evidence:
 Never fabricate or hallucinate facts, code, or tool behavior.
 Only make statements or code suggestions supported by documentation, code, or explicit user input.
 If unsure, state your uncertainty and offer to clarify or research.
+
 Incremental Development:
 Take one simple, logical step at a time.
 Avoid sweeping, multi-file, or high-risk changes unless explicitly requested.
 Build features in small, testable increments.
+
 Best Practices:
 Use clear, specific, and structured instructions and comments.
 Decompose complex tasks into manageable subtasks.

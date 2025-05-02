@@ -14,7 +14,7 @@ from __future__ import annotations
 from abc import ABC
 from dataclasses import dataclass
 from enum import Enum
-from typing import Protocol, Optional, Dict, Any, Union, runtime_checkable
+from typing import Protocol, Optional, runtime_checkable
 
 
 class ChatType(Enum):

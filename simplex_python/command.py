@@ -95,6 +95,22 @@ from .commands.misc import (
     APISetUserProtoServers,
 )
 
+# Import new reaction commands
+from .commands.reaction import (
+    APIChatItemReaction,
+    APIGetReactionMembers,
+)
+
+# Import new tag commands
+from .commands.tag import (
+    APIGetChatTags,
+    APICreateChatTag,
+    APISetChatTags,
+    APIDeleteChatTag,
+    APIUpdateChatTag,
+    APIReorderChatTags,
+)
+
 from .models.message import (
     ComposedMessage,
     MsgContent,
@@ -111,6 +127,10 @@ from .models.pagination import ChatPagination, ItemRange
 from .models.archive import ArchiveConfig, AutoAccept
 
 from .models.server import ServerCfg
+
+# Import new models
+from .models.reaction import MsgReaction, CIReactionCount
+from .models.chat_tag import ChatTag, ChatTagData
 
 # Define the union type for all commands
 ChatCommand = Union[
@@ -164,6 +184,16 @@ ChatCommand = Union[
     ReceiveFile,
     CancelFile,
     FileStatus,
+    # Reaction commands
+    APIChatItemReaction,
+    APIGetReactionMembers,
+    # Tag commands
+    APIGetChatTags,
+    APICreateChatTag,
+    APISetChatTags,
+    APIDeleteChatTag, 
+    APIUpdateChatTag,
+    APIReorderChatTags,
     # Misc commands
     SetIncognito,
     AddContact,

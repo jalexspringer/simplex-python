@@ -1,8 +1,6 @@
 """
 Transport abstraction for Simplex Python client.
 
-Defines the base Transport class and error types, mirroring the TypeScript transport system.
-Queues, async iteration, and abstract methods follow Python 3.13 idioms.
 """
 
 from __future__ import annotations
@@ -16,8 +14,8 @@ from typing import Generic, Optional, TypeVar
 
 import websockets
 
-from simplexbot.queue import ABQueue
-from simplexbot.response import ChatResponse
+from simplex_python.queue import ABQueue
+from simplex_python.response import ChatResponse
 
 
 W = TypeVar("W")  # Write type
@@ -206,11 +204,11 @@ class ChatTransport(Transport[ChatSrvRequest, ChatSrvResponse]):
         if isinstance(msg, bytes):
             msg = msg.decode("utf-8")
         obj = json.loads(msg)
-        
+
         # Create the response object with proper typing
         corr_id = obj.get("corrId")
         resp_data = obj.get("resp")
-        
+
         # Create a proper ChatSrvResponse object
         return ChatSrvResponse(corr_id=corr_id, resp=resp_data)
 
