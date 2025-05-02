@@ -1,36 +1,122 @@
-LLM Rules File for NarrativAI
-Simple and explicit is better than convoluted and implicit!
+# LLM Rules File for SimplexPython
 
-General Principles
-Truthfulness & Evidence:
-Never fabricate or hallucinate facts, code, or tool behavior.
-Only make statements or code suggestions supported by documentation, code, or explicit user input.
-If unsure, state your uncertainty and offer to clarify or research.
+*Simple and explicit is better than convoluted and implicit!*
 
-Incremental Development:
-Take one simple, logical step at a time.
-Avoid sweeping, multi-file, or high-risk changes unless explicitly requested.
-Build features in small, testable increments.
+## General Principles
 
-Best Practices:
-Use clear, specific, and structured instructions and comments.
-Decompose complex tasks into manageable subtasks.
-Always verify tool behavior and configuration.
-Toolchain & Stack
-Use podman (aliased from docker) for containers.
+### Truthfulness & Evidence:
+- Never fabricate or hallucinate facts, code, or tool behavior.
+- Only make statements or code suggestions supported by documentation, code, or explicit user input.
+- If unsure, state your uncertainty and offer to clarify or research.
 
-Python 3.13, managed with uv (not pip). Use type hints and mypy.
-Do not edit pyproject.toml directly—use uv add, uv sync, etc.
+### Incremental Development:
+- Take one simple, logical step at a time.
+- Avoid sweeping, multi-file, or high-risk changes unless explicitly requested.
+- Build features in small, testable increments.
 
+### Best Practices:
+- Use clear, specific, and structured instructions and comments.
+- Decompose complex tasks into manageable subtasks.
+- Always verify tool behavior and configuration.
 
-Automated tests: pytest.
+## SDK Architecture & Design Philosophy
 
-Documentation & Research
-Use Context7 MCP tools to look up documentation and stay up to date.
-Always verify external project/tool details from primary sources.
-Transparency & Logging
-Clearly log actions, tool calls, and reasoning steps.
-If a step fails or is ambiguous, explain why and suggest next actions.
-Ethics & Safety
-Never output or suggest unsafe, illegal, or unethical actions.
-Respect user privacy and data security at all times.
+### File Structure:
+```
+simplex_python/
+├── __init__.py
+├── client.py           # Main client interface
+├── transport.py        # Transport abstraction
+├── queue.py            # Async bounded queue implementation
+├── response.py         # Response type definitions
+├── cmds/           # Command type definitions
+│   ├── __init__.py
+│   ├── base.py
+│   ├── chats.py
+│   ├── commands.py     # Re-exports from all command modules
+│   ├── users.py
+│   └── ...
+├── clients/            # Domain-specific client implementations
+│   ├── __init__.py
+│   ├── users.py
+│   ├── chats.py
+│   ├── groups.py
+│   └── ...
+└── errors.py           # Error types
+```
+
+### Key Design Approaches:
+
+1. **High-Level Client with Domain-Specific Components**: 
+   - Main `SimplexClient` in client.py serves as the primary entry point
+   - Domain-specific clients (users, groups, chats) are exposed as properties
+   - Each domain encapsulates related operations in a fluent API
+
+2. **Strongly-Typed Command and Response System**:
+   - All commands inherit from a base command class
+   - Commands are organized by domain function (users, groups, chats)
+   - Consistent pattern for command definition using dataclasses with kw_only
+   - Commands re-exported through a unified `commands.py` module
+
+3. **Typesafe Response Handling**:
+   - Response classes mirror server response structures
+   - Response objects are created from dictionaries via `from_dict` methods
+   - Domain clients return the appropriate typed response objects
+   - Fallback to raw dictionaries when needed for flexibility
+
+4. **Async-First Design**:
+   - All client operations are async-compatible
+   - Async context manager support (`async with`) for connection handling
+   - Bounded async queues for event handling
+   - Consistent timeout handling for operations
+
+5. **Clean Separation of Concerns**:
+   - Transport layer handles low-level communication details
+   - Command layer defines structured formats for server communication
+   - Response layer provides typed parsing of server responses
+   - Domain clients provide business-logic-oriented interfaces
+
+6. **Error Handling Patterns**:
+   - Specific error types for different failure scenarios
+   - Consistent error checking in all client methods
+   - Type-specific error responses for better client feedback
+   - Descriptive error messages with context
+
+7. **Fluent API Design**:
+   - Property-based access to domain clients for discoverable API
+   - Method naming focused on actions (create, get, delete, etc.)
+   - Consistent parameter naming across domain clients
+   - Optional parameters with sensible defaults
+
+## Python Standards and Tools
+
+- Python 3.13+, targeting modern Python features
+- Type hints throughout using typing module and PEP 695 generics
+- Proper docstrings in Google style format for all classes and methods
+- Async/await for all I/O operations
+- Dataclasses for data structures
+- Proper exception handling and custom exception types
+- Logging throughout with appropriate log levels
+
+## Testing Approach
+
+- Unit tests for all domain clients
+- Mocked transport layer for command testing
+- Integration tests with real server for end-to-end verification
+- Async test fixtures using pytest-asyncio
+- Proper type checking with mypy
+
+## Documentation & Examples
+
+- Top-level README with quickstart
+- Class and method documentation in code
+- Example usage patterns for common operations
+- Type hints as live documentation
+
+## Development Process
+
+- Create new domain clients following the established pattern
+- Maintain consistency in method signatures, error handling, and typing
+- Use proper type conversions between string representations and enums
+- Return appropriate typed response objects from all methods
+- Follow existing patterns for command/response handling
