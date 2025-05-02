@@ -11,9 +11,10 @@ All commands inherit from BaseCommand and provide a consistent interface
 for chat-related operations in the Simplex system.
 """
 
-from dataclasses import dataclass, field
-from typing import Optional, Dict, Any, List, Union
-from .base import BaseCommand, ChatType, ChatPagination, ItemRange
+from dataclasses import dataclass
+from typing import Optional, Union
+
+from .base import BaseCommand, ChatPagination, ChatType, ItemRange
 
 
 @dataclass(kw_only=True)

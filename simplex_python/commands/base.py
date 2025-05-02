@@ -10,8 +10,8 @@ All commands in the Simplex system should inherit from these base structures.
 """
 
 from dataclasses import dataclass, field
-from typing import Optional, Union
 from enum import Enum
+from typing import Optional, Union
 
 
 @dataclass

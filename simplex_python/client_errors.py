@@ -7,21 +7,21 @@ allowing for more specific error details and response context when operations fa
 
 from typing import Optional
 
-from .response import ChatResponse
+from .responses import CommandResponse
 
 
 class SimplexCommandError(Exception):
     """
     Exception raised for errors in SimplexClient command execution.
-    
+
     Provides details about the specific error and includes the original response
     for further inspection when available.
     """
-    
-    def __init__(self, message: str, response: Optional[ChatResponse] = None):
+
+    def __init__(self, message: str, response: Optional[CommandResponse] = None):
         """
         Initialize a new SimplexCommandError.
-        
+
         Args:
             message: Human-readable error description
             response: Optional original response object that triggered the error
@@ -34,7 +34,8 @@ class SimplexCommandError(Exception):
 class SimplexClientError(Exception):
     """
     Exception raised for client-level errors in SimplexClient.
-    
+
     Used for connection, transport, and general client operation errors.
     """
+
     pass

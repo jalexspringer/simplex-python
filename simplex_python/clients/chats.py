@@ -18,8 +18,8 @@ from ..commands import (
     ChatPagination,
     ItemRange,
 )
-from ..response import ChatResponse, ApiChatsResponse, ApiChatResponse
-from ..errors import SimplexCommandError
+from ..responses import CommandResponse, ApiChatsResponse, ApiCommandResponse
+from ..client_errors import SimplexCommandError
 
 if TYPE_CHECKING:
     from ..client import SimplexClient
@@ -48,7 +48,7 @@ class ChatsClient:
         subscribe_connections: bool = False,
         enable_expire_chat_items: bool = False,
         start_xftp_workers: bool = False,
-    ) -> ChatResponse:
+    ) -> CommandResponse:
         """
         Start a chat session.
 
@@ -58,7 +58,7 @@ class ChatsClient:
             start_xftp_workers: Whether to start XFTP workers.
 
         Returns:
-            ChatResponse containing the chat startup information.
+            CommandResponse containing the chat startup information.
         """
         cmd = StartChat(
             type="startChat",
@@ -84,16 +84,18 @@ class ChatsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def stop(self) -> ChatResponse:
+    async def stop(self) -> CommandResponse:
         """
         Stop the current chat session.
 
         Returns:
-            ChatResponse containing the stop response data.
+            CommandResponse containing the stop response data.
         """
         cmd = APIStopChat(type="apiStopChat")
 
@@ -114,7 +116,9 @@ class ChatsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
@@ -161,7 +165,7 @@ class ChatsClient:
         count: int = 100,
         from_id: Optional[str] = None,
         search_text: Optional[str] = None,
-    ) -> ApiChatResponse:
+    ) -> ApiCommandResponse:
         """
         Get a specific chat with its messages.
 
@@ -173,7 +177,7 @@ class ChatsClient:
             search_text: Optional text to search for in messages.
 
         Returns:
-            ApiChatResponse containing the chat information with messages.
+            ApiCommandResponse containing the chat information with messages.
         """
         # Convert string chat_type to ChatType enum if needed
         chat_type_enum = chat_type
@@ -202,7 +206,7 @@ class ChatsClient:
 
         # Convert to proper response type
         api_chat_response = (
-            ApiChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+            ApiCommandResponse.from_dict(resp) if isinstance(resp, dict) else None
         )
 
         return api_chat_response or resp
@@ -213,7 +217,7 @@ class ChatsClient:
         chat_id: int,
         from_item_id: Optional[str] = None,
         to_item_id: Optional[str] = None,
-    ) -> ChatResponse:
+    ) -> CommandResponse:
         """
         Mark a chat or specific messages as read.
 
@@ -224,7 +228,7 @@ class ChatsClient:
             to_item_id: Optional end of range to mark as read.
 
         Returns:
-            ChatResponse containing the read status information.
+            CommandResponse containing the read status information.
         """
         # Convert string chat_type to ChatType enum if needed
         chat_type_enum = chat_type
@@ -252,11 +256,13 @@ class ChatsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def delete(self, chat_type: str, chat_id: int) -> ChatResponse:
+    async def delete(self, chat_type: str, chat_id: int) -> CommandResponse:
         """
         Delete a chat.
 
@@ -265,7 +271,7 @@ class ChatsClient:
             chat_id: ID of the chat to delete.
 
         Returns:
-            ChatResponse containing the deletion information.
+            CommandResponse containing the deletion information.
         """
         # Convert string chat_type to ChatType enum if needed
         chat_type_enum = chat_type
@@ -289,11 +295,13 @@ class ChatsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def clear(self, chat_type: str, chat_id: int) -> ChatResponse:
+    async def clear(self, chat_type: str, chat_id: int) -> CommandResponse:
         """
         Clear all messages from a chat.
 
@@ -302,7 +310,7 @@ class ChatsClient:
             chat_id: ID of the chat to clear.
 
         Returns:
-            ChatResponse containing the clear operation information.
+            CommandResponse containing the clear operation information.
         """
         # Convert string chat_type to ChatType enum if needed
         chat_type_enum = chat_type
@@ -326,11 +334,13 @@ class ChatsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def send_message(self, chat_id: int, content: Any) -> ChatResponse:
+    async def send_message(self, chat_id: int, content: Any) -> CommandResponse:
         """
         Send a message to a chat.
 
@@ -343,7 +353,7 @@ class ChatsClient:
             content: Message content to send (can be text, image, file, etc).
 
         Returns:
-            ChatResponse containing the sent message information.
+            CommandResponse containing the sent message information.
         """
         # Import here to avoid circular dependency
         from ..commands import APISendMessage
@@ -371,6 +381,8 @@ class ChatsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp

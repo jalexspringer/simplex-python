@@ -14,8 +14,8 @@ from ..commands import (
     CancelFile,
     FileStatus,
 )
-from ..response import ChatResponse
-from ..errors import SimplexCommandError
+from ..responses import CommandResponse
+from ..client_errors import SimplexCommandError
 
 if TYPE_CHECKING:
     from ..client import SimplexClient
@@ -38,7 +38,7 @@ class FilesClient:
         """
         self._client = client
 
-    async def set_temp_folder(self, temp_folder: str) -> ChatResponse:
+    async def set_temp_folder(self, temp_folder: str) -> CommandResponse:
         """
         Set the temporary folder for file operations.
 
@@ -46,7 +46,7 @@ class FilesClient:
             temp_folder: Path to the temporary folder.
 
         Returns:
-            ChatResponse containing the result of the operation.
+            CommandResponse containing the result of the operation.
         """
         # Ensure the folder exists
         if not os.path.exists(temp_folder):
@@ -67,11 +67,13 @@ class FilesClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def set_files_folder(self, files_folder: str) -> ChatResponse:
+    async def set_files_folder(self, files_folder: str) -> CommandResponse:
         """
         Set the folder for file storage.
 
@@ -79,7 +81,7 @@ class FilesClient:
             files_folder: Path to the files folder.
 
         Returns:
-            ChatResponse containing the result of the operation.
+            CommandResponse containing the result of the operation.
         """
         # Ensure the folder exists
         if not os.path.exists(files_folder):
@@ -100,13 +102,15 @@ class FilesClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
     async def receive_file(
         self, file_id: int, file_path: Optional[str] = None
-    ) -> ChatResponse:
+    ) -> CommandResponse:
         """
         Receive a file transfer.
 
@@ -115,7 +119,7 @@ class FilesClient:
             file_path: Optional custom path to save the file.
 
         Returns:
-            ChatResponse containing the result of the file receive operation.
+            CommandResponse containing the result of the file receive operation.
         """
         cmd = ReceiveFile(
             type="receiveFile",
@@ -143,11 +147,13 @@ class FilesClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def cancel_file(self, file_id: int) -> ChatResponse:
+    async def cancel_file(self, file_id: int) -> CommandResponse:
         """
         Cancel a file transfer.
 
@@ -155,7 +161,7 @@ class FilesClient:
             file_id: ID of the file transfer to cancel.
 
         Returns:
-            ChatResponse containing the result of the cancel operation.
+            CommandResponse containing the result of the cancel operation.
         """
         cmd = CancelFile(
             type="cancelFile",
@@ -182,11 +188,13 @@ class FilesClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def get_status(self, file_id: int) -> ChatResponse:
+    async def get_status(self, file_id: int) -> CommandResponse:
         """
         Get the status of a file transfer.
 
@@ -194,7 +202,7 @@ class FilesClient:
             file_id: ID of the file transfer to check.
 
         Returns:
-            ChatResponse containing the file status information.
+            CommandResponse containing the file status information.
         """
         cmd = FileStatus(
             type="fileStatus",
@@ -217,6 +225,8 @@ class FilesClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp

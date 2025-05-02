@@ -13,8 +13,8 @@ from ..commands import (
     APIDeleteStorage,
     ArchiveConfig,
 )
-from ..response import ChatResponse
-from ..errors import SimplexCommandError
+from ..responses import CommandResponse
+from ..client_errors import SimplexCommandError
 
 if TYPE_CHECKING:
     from ..client import SimplexClient
@@ -43,7 +43,7 @@ class DatabaseClient:
         archive_path: str,
         disable_compression: bool = False,
         parent_temp_directory: Optional[str] = None,
-    ) -> ChatResponse:
+    ) -> CommandResponse:
         """
         Export a database archive.
 
@@ -53,7 +53,7 @@ class DatabaseClient:
             parent_temp_directory: Optional parent directory for temporary files.
 
         Returns:
-            ChatResponse containing the result of the export operation.
+            CommandResponse containing the result of the export operation.
         """
         # Ensure the parent directory exists
         parent_dir = os.path.dirname(archive_path)
@@ -91,7 +91,9 @@ class DatabaseClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
@@ -100,7 +102,7 @@ class DatabaseClient:
         archive_path: str,
         disable_compression: bool = False,
         parent_temp_directory: Optional[str] = None,
-    ) -> ChatResponse:
+    ) -> CommandResponse:
         """
         Import a database archive.
 
@@ -110,7 +112,7 @@ class DatabaseClient:
             parent_temp_directory: Optional parent directory for temporary files.
 
         Returns:
-            ChatResponse containing the result of the import operation.
+            CommandResponse containing the result of the import operation.
         """
         # Verify the archive file exists
         if not os.path.exists(archive_path):
@@ -148,11 +150,13 @@ class DatabaseClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def delete_storage(self) -> ChatResponse:
+    async def delete_storage(self) -> CommandResponse:
         """
         Delete all storage data.
 
@@ -160,7 +164,7 @@ class DatabaseClient:
         Use with caution.
 
         Returns:
-            ChatResponse containing the result of the delete operation.
+            CommandResponse containing the result of the delete operation.
         """
         cmd = APIDeleteStorage(
             type="apiDeleteStorage",
@@ -184,6 +188,8 @@ class DatabaseClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp

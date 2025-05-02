@@ -14,8 +14,8 @@ from datetime import datetime
 
 from simplex_python.client import SimplexClient
 from simplex_python.transport import ChatServer
-from simplex_python.response import ChatResponse
-from simplex_python.errors import SimplexClientError, SimplexCommandError
+from simplex_python.responses import CommandResponse
+from simplex_python.client_errors import SimplexClientError, SimplexCommandError
 
 # Configure logging
 logging.basicConfig(
@@ -56,13 +56,13 @@ async def setup_bot(client: SimplexClient) -> Optional[Dict[str, Any]]:
     user_response = await client.users.get_active()
     user = None
 
-    if isinstance(user_response, ChatResponse):
+    if isinstance(user_response, CommandResponse):
         user = user_response.user if hasattr(user_response, "user") else None
 
     if not user:
         logger.info("No active user profile, creating one...")
         create_response = await client.users.create(BOT_DISPLAY_NAME, BOT_FULL_NAME)
-        if isinstance(create_response, ChatResponse):
+        if isinstance(create_response, CommandResponse):
             user = create_response.user if hasattr(create_response, "user") else None
         else:
             logger.warning("Unexpected response from users.create")
@@ -80,7 +80,7 @@ async def setup_bot(client: SimplexClient) -> Optional[Dict[str, Any]]:
     # Get or create the user address using fluent API
     address = None
     address_response = await client.users.get_address()
-    if isinstance(address_response, ChatResponse):
+    if isinstance(address_response, CommandResponse):
         # Extract the address from the response
         if hasattr(address_response, "contactLink") and address_response.contactLink:
             address = address_response.contactLink.get("connReqContact")
@@ -90,7 +90,7 @@ async def setup_bot(client: SimplexClient) -> Optional[Dict[str, Any]]:
         # Create new address if none exists
         create_addr_response = await client.users.create_address()
         address_response = await client.users.get_address()
-        if isinstance(address_response, ChatResponse):
+        if isinstance(address_response, CommandResponse):
             if (
                 hasattr(address_response, "contactLink")
                 and address_response.contactLink

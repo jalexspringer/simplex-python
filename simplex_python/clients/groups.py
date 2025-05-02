@@ -24,8 +24,8 @@ from ..commands import (
     GroupProfile,
     GroupMemberRole,
 )
-from ..response import ChatResponse
-from ..errors import SimplexCommandError
+from ..responses import CommandResponse
+from ..client_errors import SimplexCommandError
 
 if TYPE_CHECKING:
     from ..client import SimplexClient
@@ -50,7 +50,7 @@ class GroupsClient:
 
     async def create(
         self, display_name: str, full_name: str = "", image: Optional[str] = None
-    ) -> ChatResponse:
+    ) -> CommandResponse:
         """
         Create a new group.
 
@@ -60,7 +60,7 @@ class GroupsClient:
             image: Optional base64-encoded image for the group.
 
         Returns:
-            ChatResponse containing the newly created group info.
+            CommandResponse containing the newly created group info.
         """
         group_profile = GroupProfile(
             displayName=display_name, fullName=full_name, image=image
@@ -87,13 +87,15 @@ class GroupsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
     async def add_member(
         self, group_id: int, contact_id: int, role: str = GroupMemberRole.MEMBER
-    ) -> ChatResponse:
+    ) -> CommandResponse:
         """
         Add a member to a group.
 
@@ -103,7 +105,7 @@ class GroupsClient:
             role: Role to assign to the member (member, admin, or owner).
 
         Returns:
-            ChatResponse containing the newly created group member.
+            CommandResponse containing the newly created group member.
         """
         member_role = role
         if isinstance(role, str) and not isinstance(role, GroupMemberRole):
@@ -132,11 +134,13 @@ class GroupsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def join(self, group_id: int) -> ChatResponse:
+    async def join(self, group_id: int) -> CommandResponse:
         """
         Join a group.
 
@@ -144,7 +148,7 @@ class GroupsClient:
             group_id: ID of the group to join.
 
         Returns:
-            ChatResponse containing the group info.
+            CommandResponse containing the group info.
         """
         cmd = APIJoinGroup(type="apiJoinGroup", groupId=group_id)
 
@@ -167,11 +171,13 @@ class GroupsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def remove_member(self, group_id: int, member_id: int) -> ChatResponse:
+    async def remove_member(self, group_id: int, member_id: int) -> CommandResponse:
         """
         Remove a member from a group.
 
@@ -180,7 +186,7 @@ class GroupsClient:
             member_id: ID of the member to remove.
 
         Returns:
-            ChatResponse containing the removed member info.
+            CommandResponse containing the removed member info.
         """
         cmd = APIRemoveMember(
             type="apiRemoveMember", groupId=group_id, memberId=member_id
@@ -201,11 +207,13 @@ class GroupsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def leave(self, group_id: int) -> ChatResponse:
+    async def leave(self, group_id: int) -> CommandResponse:
         """
         Leave a group.
 
@@ -213,7 +221,7 @@ class GroupsClient:
             group_id: ID of the group to leave.
 
         Returns:
-            ChatResponse containing the group info.
+            CommandResponse containing the group info.
         """
         cmd = APILeaveGroup(type="apiLeaveGroup", groupId=group_id)
 
@@ -236,11 +244,13 @@ class GroupsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def list_members(self, group_id: int) -> ChatResponse:
+    async def list_members(self, group_id: int) -> CommandResponse:
         """
         List members of a group.
 
@@ -248,7 +258,7 @@ class GroupsClient:
             group_id: ID of the group.
 
         Returns:
-            ChatResponse containing the list of group members.
+            CommandResponse containing the list of group members.
         """
         cmd = APIListMembers(type="apiListMembers", groupId=group_id)
 
@@ -267,7 +277,9 @@ class GroupsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
@@ -277,7 +289,7 @@ class GroupsClient:
         display_name: str,
         full_name: str = "",
         image: Optional[str] = None,
-    ) -> ChatResponse:
+    ) -> CommandResponse:
         """
         Update a group profile.
 
@@ -288,7 +300,7 @@ class GroupsClient:
             image: New base64-encoded image for the group.
 
         Returns:
-            ChatResponse containing the updated group info.
+            CommandResponse containing the updated group info.
         """
         group_profile = GroupProfile(
             displayName=display_name, fullName=full_name, image=image
@@ -313,13 +325,15 @@ class GroupsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
     async def create_link(
         self, group_id: int, role: str = GroupMemberRole.MEMBER
-    ) -> ChatResponse:
+    ) -> CommandResponse:
         """
         Create a group link with a specified member role.
 
@@ -328,7 +342,7 @@ class GroupsClient:
             role: Role for users who join via the link (member, admin, or owner).
 
         Returns:
-            ChatResponse containing the group link.
+            CommandResponse containing the group link.
         """
         member_role = role
         if isinstance(role, str) and not isinstance(role, GroupMemberRole):
@@ -355,13 +369,15 @@ class GroupsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
     async def update_link_role(
         self, group_id: int, role: str = GroupMemberRole.MEMBER
-    ) -> ChatResponse:
+    ) -> CommandResponse:
         """
         Update the member role for a group link.
 
@@ -370,7 +386,7 @@ class GroupsClient:
             role: New role for users who join via the link.
 
         Returns:
-            ChatResponse containing the updated link info.
+            CommandResponse containing the updated link info.
         """
         member_role = role
         if isinstance(role, str) and not isinstance(role, GroupMemberRole):
@@ -397,11 +413,13 @@ class GroupsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def delete_link(self, group_id: int) -> ChatResponse:
+    async def delete_link(self, group_id: int) -> CommandResponse:
         """
         Delete a group link.
 
@@ -409,7 +427,7 @@ class GroupsClient:
             group_id: ID of the group.
 
         Returns:
-            ChatResponse containing the result of the delete operation.
+            CommandResponse containing the result of the delete operation.
         """
         cmd = APIDeleteGroupLink(type="apiDeleteGroupLink", groupId=group_id)
 
@@ -429,11 +447,13 @@ class GroupsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def get_link(self, group_id: int) -> ChatResponse:
+    async def get_link(self, group_id: int) -> CommandResponse:
         """
         Get a group link.
 
@@ -441,7 +461,7 @@ class GroupsClient:
             group_id: ID of the group.
 
         Returns:
-            ChatResponse containing the group link if it exists.
+            CommandResponse containing the group link if it exists.
         """
         cmd = APIGetGroupLink(type="apiGetGroupLink", groupId=group_id)
 
@@ -463,11 +483,13 @@ class GroupsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def get_member_info(self, group_id: int, member_id: int) -> ChatResponse:
+    async def get_member_info(self, group_id: int, member_id: int) -> CommandResponse:
         """
         Get information about a group member.
 
@@ -476,7 +498,7 @@ class GroupsClient:
             member_id: ID of the member.
 
         Returns:
-            ChatResponse containing the member information, including connection stats.
+            CommandResponse containing the member information, including connection stats.
         """
         cmd = APIGroupMemberInfo(
             type="apiGroupMemberInfo", groupId=group_id, memberId=member_id
@@ -497,13 +519,15 @@ class GroupsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
     async def get_verification_code(
         self, group_id: int, member_id: int
-    ) -> ChatResponse:
+    ) -> CommandResponse:
         """
         Get a verification code for a group member.
 
@@ -512,7 +536,7 @@ class GroupsClient:
             member_id: ID of the member.
 
         Returns:
-            ChatResponse containing the verification code.
+            CommandResponse containing the verification code.
         """
         cmd = APIGetGroupMemberCode(
             type="apiGetGroupMemberCode", groupId=group_id, groupMemberId=member_id
@@ -534,13 +558,15 @@ class GroupsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
     async def verify_member(
         self, group_id: int, member_id: int, connection_code: str
-    ) -> ChatResponse:
+    ) -> CommandResponse:
         """
         Verify a group member using a connection code.
 
@@ -550,7 +576,7 @@ class GroupsClient:
             connection_code: Verification code to validate.
 
         Returns:
-            ChatResponse containing the verification result.
+            CommandResponse containing the verification result.
         """
         cmd = APIVerifyGroupMember(
             type="apiVerifyGroupMember",
@@ -577,6 +603,8 @@ class GroupsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp

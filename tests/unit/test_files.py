@@ -13,7 +13,7 @@ import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from simplex_python.errors import SimplexCommandError
+from simplex_python.client_errors import SimplexCommandError
 from tests.unit.conftest import MockResponse, mock_client, files_client
 
 

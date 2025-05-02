@@ -18,7 +18,7 @@ from ..commands import (
     MCText,
     ChatItemId,
 )
-from ..errors import SimplexCommandError
+from ..client_errors import SimplexCommandError
 
 if TYPE_CHECKING:
     from ..client import SimplexClient

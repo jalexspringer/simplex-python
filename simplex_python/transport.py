@@ -15,7 +15,7 @@ from typing import Generic, Optional, TypeVar
 import websockets
 
 from simplex_python.queue import ABQueue
-from simplex_python.response import ChatResponse
+from simplex_python.responses import CommandResponse
 
 
 W = TypeVar("W")  # Write type
@@ -135,7 +135,7 @@ class ChatSrvResponse:
     """Response received from the chat server."""
 
     corr_id: Optional[str]
-    resp: ChatResponse  # Now typed
+    resp: CommandResponse  # Now typed
 
 
 @dataclass(kw_only=True)
@@ -143,10 +143,10 @@ class ParsedChatSrvResponse:
     """Parsed response from the chat server."""
 
     corr_id: Optional[str] = None
-    resp: Optional[ChatResponse] = None  # Now typed
+    resp: Optional[CommandResponse] = None  # Now typed
 
 
-class ChatResponseError(Exception):
+class CommandResponseError(Exception):
     """Raised for errors in chat server responses."""
 
     def __init__(self, message: str, data: Optional[str] = None):
@@ -158,7 +158,7 @@ class ChatTransport(Transport[ChatSrvRequest, ChatSrvResponse]):
     """High-level transport abstraction for Simplex chat protocol.
 
     Wraps a WSTransport and provides protocol-aware send/receive methods.
-    Uses ChatCommand and ChatResponse for type safety.
+    Uses ChatCommand and CommandResponse for type safety.
     """
 
     def __init__(self, ws_transport: WSTransport, timeout: float, qsize: int):

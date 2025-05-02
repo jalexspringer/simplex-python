@@ -17,8 +17,8 @@ from ..commands import (
     APISetActiveUser,
     MCText,
 )
-from ..response import ChatResponse
-from ..errors import SimplexCommandError
+from ..responses import CommandResponse
+from ..client_errors import SimplexCommandError
 
 if TYPE_CHECKING:
     from ..client import SimplexClient
@@ -41,12 +41,12 @@ class UsersClient:
         """
         self._client = client
 
-    async def get_active(self) -> Optional[ChatResponse]:
+    async def get_active(self) -> Optional[CommandResponse]:
         """
         Get the currently active user profile.
 
         Returns:
-            ChatResponse containing the user profile object, or None if no active user exists.
+            CommandResponse containing the user profile object, or None if no active user exists.
 
         Raises:
             SimplexCommandError: If there was an error executing the command.
@@ -62,7 +62,7 @@ class UsersClient:
 
         if resp.get("type") == "activeUser":
             # Convert to proper response type
-            return ChatResponse.from_dict(resp)
+            return CommandResponse.from_dict(resp)
         elif resp.get("type") == "chatCmdError":
             # Special case for "no active user" which is not an error
             error_info = resp.get("chatError", {})
@@ -86,7 +86,7 @@ class UsersClient:
         image: Optional[str] = None,
         same_servers: bool = True,
         past_timestamp: bool = False,
-    ) -> ChatResponse:
+    ) -> CommandResponse:
         """
         Create a new active user profile.
 
@@ -98,7 +98,7 @@ class UsersClient:
             past_timestamp: Whether to use a past timestamp for the profile creation.
 
         Returns:
-            ChatResponse containing the newly created user profile.
+            CommandResponse containing the newly created user profile.
 
         Raises:
             SimplexCommandError: If there was an error creating the user profile.
@@ -127,13 +127,15 @@ class UsersClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
     async def set_active(
         self, user_id: int, view_pwd: Optional[str] = None
-    ) -> ChatResponse:
+    ) -> CommandResponse:
         """
         Set the active user.
 
@@ -142,7 +144,7 @@ class UsersClient:
             view_pwd: Optional view password for hidden users.
 
         Returns:
-            ChatResponse containing the activated user profile.
+            CommandResponse containing the activated user profile.
 
         Raises:
             SimplexCommandError: If there was an error setting the active user.
@@ -166,16 +168,18 @@ class UsersClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def create_address(self) -> ChatResponse:
+    async def create_address(self) -> CommandResponse:
         """
         Create a new contact address for the active user.
 
         Returns:
-            ChatResponse containing the newly created contact address.
+            CommandResponse containing the newly created contact address.
 
         Raises:
             SimplexCommandError: If there was an error creating the address.
@@ -198,16 +202,18 @@ class UsersClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def delete_address(self) -> ChatResponse:
+    async def delete_address(self) -> CommandResponse:
         """
         Delete the contact address for the active user.
 
         Returns:
-            ChatResponse containing the result of the delete operation.
+            CommandResponse containing the result of the delete operation.
 
         Raises:
             SimplexCommandError: If there was an error deleting the address.
@@ -230,16 +236,18 @@ class UsersClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def get_address(self) -> Optional[ChatResponse]:
+    async def get_address(self) -> Optional[CommandResponse]:
         """
         Get the current contact address for the active user.
 
         Returns:
-            ChatResponse containing the contact address, or None if not set.
+            CommandResponse containing the contact address, or None if not set.
 
         Raises:
             SimplexCommandError: If there was an error getting the address.
@@ -257,7 +265,7 @@ class UsersClient:
 
         if resp.get("type") == "userContactLink":
             # Convert to proper response type
-            return ChatResponse.from_dict(resp)
+            return CommandResponse.from_dict(resp)
         elif resp.get("type") == "chatCmdError":
             # Special case for "no user contact link" which is not an error
             error_info = resp.get("chatError", {})
@@ -275,7 +283,7 @@ class UsersClient:
 
     async def enable_auto_accept(
         self, accept_incognito: bool = False, auto_reply_text: Optional[str] = None
-    ) -> ChatResponse:
+    ) -> CommandResponse:
         """
         Enable automatic acceptance of contact requests.
 
@@ -284,7 +292,7 @@ class UsersClient:
             auto_reply_text: Optional text message to send automatically on acceptance.
 
         Returns:
-            ChatResponse containing the result of the operation.
+            CommandResponse containing the result of the operation.
 
         Raises:
             SimplexCommandError: If there was an error enabling auto accept.
@@ -315,16 +323,18 @@ class UsersClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def disable_auto_accept(self) -> ChatResponse:
+    async def disable_auto_accept(self) -> CommandResponse:
         """
         Disable automatic acceptance of contact requests.
 
         Returns:
-            ChatResponse containing the result of the operation.
+            CommandResponse containing the result of the operation.
 
         Raises:
             SimplexCommandError: If there was an error disabling auto accept.
@@ -345,6 +355,8 @@ class UsersClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp

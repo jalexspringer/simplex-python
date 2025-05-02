@@ -11,9 +11,9 @@ All commands inherit from BaseCommand and provide a consistent interface
 for message-related operations in the Simplex system.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Optional, List, Union
-from .base import BaseCommand, ChatType, ChatItemId, DeleteMode, MsgContent, LinkPreview
+from .base import BaseCommand, ChatType, ChatItemId, DeleteMode, MsgContent
 
 
 @dataclass

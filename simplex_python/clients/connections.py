@@ -21,8 +21,8 @@ from ..commands import (
     ServerProtocol,
     ServerCfg,
 )
-from ..response import ChatResponse
-from ..errors import SimplexCommandError
+from ..responses import CommandResponse
+from ..client_errors import SimplexCommandError
 
 if TYPE_CHECKING:
     from ..client import SimplexClient
@@ -46,7 +46,7 @@ class ConnectionsClient:
         """
         self._client = client
 
-    async def accept_contact(self, contact_req_id: int) -> ChatResponse:
+    async def accept_contact(self, contact_req_id: int) -> CommandResponse:
         """
         Accept a contact request.
 
@@ -54,7 +54,7 @@ class ConnectionsClient:
             contact_req_id: ID of the contact request to accept.
 
         Returns:
-            ChatResponse containing the result of the accept operation.
+            CommandResponse containing the result of the accept operation.
         """
         cmd = APIAcceptContact(
             type="apiAcceptContact",
@@ -79,11 +79,13 @@ class ConnectionsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def reject_contact(self, contact_req_id: int) -> ChatResponse:
+    async def reject_contact(self, contact_req_id: int) -> CommandResponse:
         """
         Reject a contact request.
 
@@ -91,7 +93,7 @@ class ConnectionsClient:
             contact_req_id: ID of the contact request to reject.
 
         Returns:
-            ChatResponse containing the result of the reject operation.
+            CommandResponse containing the result of the reject operation.
         """
         cmd = APIRejectContact(
             type="apiRejectContact",
@@ -116,11 +118,13 @@ class ConnectionsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def set_contact_alias(self, contact_id: int, alias: str) -> ChatResponse:
+    async def set_contact_alias(self, contact_id: int, alias: str) -> CommandResponse:
         """
         Set an alias for a contact.
 
@@ -129,7 +133,7 @@ class ConnectionsClient:
             alias: Alias to set for the contact.
 
         Returns:
-            ChatResponse containing the result of the alias update.
+            CommandResponse containing the result of the alias update.
         """
         cmd = APISetContactAlias(
             type="apiSetContactAlias",
@@ -153,11 +157,13 @@ class ConnectionsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def get_contact_info(self, contact_id: int) -> ChatResponse:
+    async def get_contact_info(self, contact_id: int) -> CommandResponse:
         """
         Get information about a contact.
 
@@ -165,7 +171,7 @@ class ConnectionsClient:
             contact_id: ID of the contact.
 
         Returns:
-            ChatResponse containing the contact information.
+            CommandResponse containing the contact information.
         """
         cmd = APIContactInfo(
             type="apiContactInfo",
@@ -188,11 +194,13 @@ class ConnectionsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def get_verification_code(self, contact_id: int) -> ChatResponse:
+    async def get_verification_code(self, contact_id: int) -> CommandResponse:
         """
         Get a verification code for a contact.
 
@@ -200,7 +208,7 @@ class ConnectionsClient:
             contact_id: ID of the contact.
 
         Returns:
-            ChatResponse containing the verification code.
+            CommandResponse containing the verification code.
         """
         cmd = APIGetContactCode(
             type="apiGetContactCode",
@@ -223,13 +231,15 @@ class ConnectionsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
     async def verify_contact(
         self, contact_id: int, connection_code: str
-    ) -> ChatResponse:
+    ) -> CommandResponse:
         """
         Verify a contact using a connection code.
 
@@ -238,7 +248,7 @@ class ConnectionsClient:
             connection_code: Verification code to use.
 
         Returns:
-            ChatResponse containing the verification result.
+            CommandResponse containing the verification result.
         """
         cmd = APIVerifyContact(
             type="apiVerifyContact",
@@ -264,16 +274,18 @@ class ConnectionsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def add_contact(self) -> ChatResponse:
+    async def add_contact(self) -> CommandResponse:
         """
         Add a new contact.
 
         Returns:
-            ChatResponse containing the result of the add operation.
+            CommandResponse containing the result of the add operation.
         """
         cmd = AddContact(type="addContact")
 
@@ -288,11 +300,13 @@ class ConnectionsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def connect(self, connection_request: str) -> ChatResponse:
+    async def connect(self, connection_request: str) -> CommandResponse:
         """
         Connect using a connection request string.
 
@@ -300,7 +314,7 @@ class ConnectionsClient:
             connection_request: The connection request string.
 
         Returns:
-            ChatResponse containing the result of the connect operation.
+            CommandResponse containing the result of the connect operation.
         """
         cmd = Connect(
             type="connect",
@@ -319,16 +333,18 @@ class ConnectionsClient:
 
         # Expected response varies depending on the type of connection
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def connect_simplex(self) -> ChatResponse:
+    async def connect_simplex(self) -> CommandResponse:
         """
         Connect to the Simplex network.
 
         Returns:
-            ChatResponse containing the result of the connect operation.
+            CommandResponse containing the result of the connect operation.
         """
         cmd = ConnectSimplex(type="connectSimplex")
 
@@ -341,11 +357,15 @@ class ConnectionsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
-    async def get_protocol_servers(self, user_id: int, protocol: str) -> ChatResponse:
+    async def get_protocol_servers(
+        self, user_id: int, protocol: str
+    ) -> CommandResponse:
         """
         Get protocol servers for a user.
 
@@ -354,7 +374,7 @@ class ConnectionsClient:
             protocol: Protocol type (e.g., 'smp', 'xftp').
 
         Returns:
-            ChatResponse containing the user's protocol servers.
+            CommandResponse containing the user's protocol servers.
         """
         # Convert string protocol to ServerProtocol enum if needed
         protocol_enum = protocol
@@ -383,13 +403,15 @@ class ConnectionsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp
 
     async def set_protocol_servers(
         self, user_id: int, protocol: str, servers: List[ServerCfg]
-    ) -> ChatResponse:
+    ) -> CommandResponse:
         """
         Set protocol servers for a user.
 
@@ -399,7 +421,7 @@ class ConnectionsClient:
             servers: List of server configurations to set.
 
         Returns:
-            ChatResponse containing the result of the set operation.
+            CommandResponse containing the result of the set operation.
         """
         # Convert string protocol to ServerProtocol enum if needed
         protocol_enum = protocol
@@ -429,6 +451,8 @@ class ConnectionsClient:
             raise SimplexCommandError(error_msg, resp)
 
         # Convert to proper response type
-        chat_response = ChatResponse.from_dict(resp) if isinstance(resp, dict) else None
+        chat_response = (
+            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
+        )
 
         return chat_response or resp

@@ -19,9 +19,9 @@ from collections import OrderedDict
 
 from .queue import ABQueue
 from .commands import SimplexCommand
-from .response import ChatResponse
+from .responses import CommandResponse
 from .transport import ChatServer, ChatTransport, ChatSrvRequest
-from .errors import SimplexClientError, SimplexCommandError
+from .client_errors import SimplexClientError, SimplexCommandError
 
 if TYPE_CHECKING:
     from .clients.users import UsersClient
@@ -72,7 +72,7 @@ class SimplexClient:
         self._timeout = timeout
         self._qsize = qsize
         self._transport: Optional[ChatTransport] = None
-        self._event_q: Optional[ABQueue[ChatResponse]] = None
+        self._event_q: Optional[ABQueue[CommandResponse]] = None
         self._pending: OrderedDict[str, asyncio.Future] = OrderedDict()
         self._recv_task: Optional[asyncio.Task] = None
         self._connected = False
@@ -101,7 +101,7 @@ class SimplexClient:
         self._transport = await ChatTransport.connect(
             self._server, timeout=self._timeout, qsize=self._qsize
         )
-        self._event_q = ABQueue[ChatResponse](self._qsize)
+        self._event_q = ABQueue[CommandResponse](self._qsize)
         self._recv_task = asyncio.create_task(self._recv_loop())
         self._connected = True
         logger.info("Connected to chat server")
@@ -127,7 +127,7 @@ class SimplexClient:
         self,
         cmd: Union[SimplexCommand, Dict[str, Any]],
         expect_response: bool = True,
-    ) -> Optional[ChatResponse]:
+    ) -> Optional[CommandResponse]:
         """
         Send a command to the chat server and optionally await a response.
 
@@ -215,7 +215,7 @@ class SimplexClient:
             logger.exception(f"Exception in recv_loop: {e}")
             self._connected = False
 
-    async def events(self) -> AsyncGenerator[ChatResponse, None]:
+    async def events(self) -> AsyncGenerator[CommandResponse, None]:
         """
         Async generator yielding server events (responses not matched to a request).
 
