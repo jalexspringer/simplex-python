@@ -58,13 +58,24 @@ class ActiveUserResponse(CommandResponse):
         """Get the user's full name from profile."""
         return self.profile.get("fullName") if self.profile else None
 
+    @property
+    def profile_address(self) -> Optional[str]:
+        """Get the user's profile address (contact link) if it exists."""
+
+        return self.profile.get("contactLink")
+
+    @property
+    def has_profile_address(self) -> bool:
+        """Check if the user has a profile address."""
+        return "contactLink" in self.profile and self.profile["contactLink"] is not None
+
 
 @dataclass
 class UsersListResponse(CommandResponse):
     """Response containing a list of users."""
 
     users: List[Dict[str, Any]] = field(default_factory=list)
-    
+
     # Internal representation of processed user items
     _user_items: List["UserItem"] = field(default_factory=list, repr=False)
 
@@ -72,19 +83,21 @@ class UsersListResponse(CommandResponse):
     def from_dict(cls, data: Dict[str, Any]) -> "UsersListResponse":
         raw_users = data.get("users", [])
         response = cls(type="usersList", users=raw_users)
-        
+
         # Process raw users into UserItem objects
-        response._user_items = [UserItem.from_dict(user_data) for user_data in raw_users]
+        response._user_items = [
+            UserItem.from_dict(user_data) for user_data in raw_users
+        ]
         return response
-    
+
     def __len__(self) -> int:
         """Return the number of users in the list."""
         return len(self._user_items)
-    
+
     def __getitem__(self, index) -> "UserItem":
         """Access user items by index."""
         return self._user_items[index]
-    
+
     def __iter__(self):
         """Allow iteration over user items."""
         return iter(self._user_items)
@@ -93,10 +106,10 @@ class UsersListResponse(CommandResponse):
 @dataclass
 class UserItem:
     """Individual user item from a users list response."""
-    
+
     # Raw user dictionary
     user: Dict[str, Any] = field(default_factory=dict)
-    
+
     # Direct access to common properties
     user_id: Optional[int] = None
     agent_user_id: Optional[str] = None
@@ -105,12 +118,12 @@ class UserItem:
     preferences: Dict[str, Any] = field(default_factory=dict)
     active_user: bool = False
     unread_count: int = 0
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "UserItem":
         """Create a UserItem from a dictionary."""
         user_data = data.get("user", {})
-        
+
         return cls(
             user=user_data,
             user_id=user_data.get("userId"),
@@ -119,14 +132,14 @@ class UserItem:
             profile=user_data.get("profile", {}),
             preferences=user_data.get("fullPreferences", {}),
             active_user=user_data.get("activeUser", False),
-            unread_count=data.get("unreadCount", 0)
+            unread_count=data.get("unreadCount", 0),
         )
-    
+
     @property
     def display_name(self) -> Optional[str]:
         """Get the user's display name from profile."""
         return self.profile.get("displayName") if self.profile else None
-    
+
     @property
     def full_name(self) -> Optional[str]:
         """Get the user's full name from profile."""

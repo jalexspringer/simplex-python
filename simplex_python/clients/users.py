@@ -546,14 +546,17 @@ class UsersClient:
         raise SimplexCommandError(error_msg, resp)
 
     async def delete_user(
-        self, user_id: int, delete_smp_queues: bool = True, view_pwd: Optional[str] = None
+        self,
+        user_id: int,
+        delete_smp_queues: bool = True,
+        view_pwd: Optional[str] = None,
     ) -> Union[ActiveUserResponse, "CmdOkResponse"]:
         """
         Delete a user from the SimpleX Chat system.
 
         This permanently removes the user account and optionally its associated SMP queues.
         If the user is hidden, the view password must be provided.
-        
+
         IMPORTANT: You cannot delete the currently active user. You must first switch to another
         user with set_active() before deleting a user. Attempting to delete the active user
         will result in a SimplexCommandError with 'cantDeleteActiveUser' error.
@@ -571,7 +574,7 @@ class UsersClient:
             ```python
             # Get current user before deletion to ensure we're not deleting the active user
             active_user = await client.users.get_active()
-            
+
             # Only proceed if we're attempting to delete a different user
             if active_user.user_id != user_id_to_delete:
                 result = await client.users.delete_user(user_id_to_delete)
@@ -594,7 +597,7 @@ class UsersClient:
                                  or if attempting to delete the currently active user.
         """
         from ..responses.base import CmdOkResponse
-        
+
         # Check if we're trying to delete the active user - this will fail with an error
         # but we can provide a better error message by checking first
         active_user = await self.get_active(include_contact_link=False)
@@ -602,29 +605,71 @@ class UsersClient:
             error_msg = f"Cannot delete the active user (ID: {user_id}). Switch to a different user first with set_active()."
             logger.error(error_msg)
             raise ValueError(error_msg)
-            
+
         # Create the command
         cmd = APIDeleteUser(
-            type="apiDeleteUser", 
-            userId=user_id, 
+            type="apiDeleteUser",
+            userId=user_id,
             delSMPQueues=delete_smp_queues,
-            viewPwd=view_pwd
+            viewPwd=view_pwd,
         )
-        
+
         # Send the command
         resp = await self._client.send_command(cmd)
-        
+
         # If we got None back, that's unexpected for this command
         if resp is None:
             error_msg = f"Failed to delete user {user_id}: No response"
             logger.error(error_msg)
             raise SimplexCommandError(error_msg, resp)
-        
+
         # If we got back a proper ActiveUserResponse or CmdOkResponse, return it
         if isinstance(resp, (ActiveUserResponse, CmdOkResponse)):
             return resp
-        
+
         # If we received some other type, raise an error
         error_msg = f"Failed to delete user {user_id}: Unexpected response type {getattr(resp, 'type', 'unknown')}"
         logger.error(error_msg)
         raise SimplexCommandError(error_msg, resp)
+
+    async def rename_user(
+        self, user_id: int, new_display_name: str, new_full_name: Optional[str] = None
+    ) -> ActiveUserResponse:
+        """Rename a user by updating their profile.
+
+        Args:
+            user_id: The ID of the user to rename
+            new_display_name: The new display name
+            new_full_name: Optional new full name
+
+        Returns:
+            Updated ActiveUserResponse
+        """
+        # Get current active user to restore afterward
+        current_active = await self.get_active()
+        try:
+            # Switch to the user we want to rename
+            await self.set_active(user_id)
+
+            # Get the current user to preserve existing profile settings
+            user = await self.get_active()
+
+            # Create an updated profile
+            from ..commands import Profile
+
+            profile = Profile(
+                displayName=new_display_name,
+                fullName=new_full_name if new_full_name else user.full_name,
+            )
+
+            # Send the update profile command
+            from ..commands import UpdateProfile
+
+            cmd = UpdateProfile(type="updateProfile", profile=profile)
+            updated_user = await self._client.send_command(cmd)
+
+            return updated_user
+        finally:
+            # Switch back to originally active user if different
+            if current_active and current_active.user_id != user_id:
+                await self.set_active(current_active.user_id)
