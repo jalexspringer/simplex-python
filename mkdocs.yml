@@ -1,8 +1,6 @@
 site_name: SimplexPython SDK
 theme:
-  name: material
-  palette:
-    primary: indigo
+  name: mkdocs
 
 plugins:
   - search
