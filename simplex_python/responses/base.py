@@ -208,6 +208,71 @@ class StoreErrorType(CommandError):
 
     storeError: Dict[str, Any] = field(default_factory=dict)
 
+    @property
+    def error_type(self) -> Optional[str]:
+        """Get the specific store error type if available.
+
+        The server may encode the error type directly as a key in the storeError dict,
+        or it might be in a nested structure. This tries to extract the type name.
+        """
+        # Check for direct error type keys
+        for key in self.storeError.keys():
+            if key.startswith("SE"):  # Store Error types in Haskell begin with SE
+                return key
+
+        # Check for type key within storeError
+        if "type" in self.storeError:
+            return self.storeError.get("type")
+
+        # May need more parsing for nested structures
+        return None
+
+    def is_duplicate_contact_link_error(self) -> bool:
+        """Check if this is a duplicate contact link error.
+
+        This specific error occurs when trying to create a contact link (address)
+        when one already exists for the user.
+        """
+        # Direct match for the error type
+        if self.error_type == "SEDuplicateContactLink":
+            return True
+
+        # Look for the error message in chat errors
+        chat_errors = self.storeError.get("chatError", [])
+        if isinstance(chat_errors, list):
+            for error in chat_errors:
+                if isinstance(error, str) and "you already have chat address" in error:
+                    return True
+
+        # For robustness, also check the string representation
+        error_str = str(self.storeError)
+        return "SEDuplicateContactLink" in error_str or "you already have chat address" in error_str.lower()
+
+    def is_contact_link_not_found_error(self) -> bool:
+        """Check if this is a 'contact link not found' error.
+
+        This specific error occurs when trying to access or use a contact link (address)
+        that doesn't exist for the user yet.
+        """
+        # Direct match for the error type
+        if self.error_type == "SEUserContactLinkNotFound":
+            return True
+
+        # Check the type field (common in the JSON response)
+        if self.storeError.get("type") == "userContactLinkNotFound":
+            return True
+
+        # Look for the error message in chat errors
+        chat_errors = self.storeError.get("chatError", [])
+        if isinstance(chat_errors, list):
+            for error in chat_errors:
+                if isinstance(error, str) and "no chat address" in error:
+                    return True
+
+        # For robustness, also check the string representation
+        error_str = str(self.storeError)
+        return "SEUserContactLinkNotFound" in error_str or "userContactLinkNotFound" in error_str or "no chat address" in error_str.lower()
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "StoreErrorType":
         return cls(type="errorStore", storeError=data.get("storeError", {}))
@@ -238,45 +303,45 @@ class ApiParsedMarkdownResponse(CommandResponse):
 class ResponseFactory:
     """
     Factory class for creating appropriate response objects based on response type.
-    
+
     This centralized factory handles the mapping between server response types and
     the corresponding Python response classes.
     """
-    
+
     # This map will be populated by register_response_type
     _response_map: Dict[str, Any] = {}
-    
+
     @classmethod
     def register_response_type(cls, response_type: str, response_class: Any) -> None:
         """
         Register a response type with its corresponding class.
-        
+
         Args:
             response_type: The response type string (e.g., "activeUser")
             response_class: The corresponding response class
         """
         cls._response_map[response_type] = response_class
-    
+
     @classmethod
     def create(cls, data: Dict[str, Any]) -> CommandResponse:
         """
         Create a response object of the appropriate type based on the response data.
-        
+
         Args:
             data: The response data dictionary
-            
+
         Returns:
             An instance of the appropriate CommandResponse subclass
         """
         if not isinstance(data, dict):
             return CommandResponse(type="unknown")
-            
+
         response_type = data.get("type", "unknown")
-        
+
         # Handle error responses
         if response_type == "chatCmdError":
             return CommandErrorResponse.from_dict(data)
-        
+
         # Check if we have a registered handler for this response type
         if response_type in cls._response_map:
             try:
@@ -287,6 +352,6 @@ class ResponseFactory:
                 logging.getLogger(__name__).error(
                     f"Error creating response for type {response_type}: {e}"
                 )
-        
+
         # Fall back to generic response
         return CommandResponse(type=response_type, user=data.get("user"))

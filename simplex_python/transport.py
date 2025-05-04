@@ -13,7 +13,9 @@ from dataclasses import dataclass
 from typing import Generic, Optional, TypeVar
 
 import websockets
+from websockets.exceptions import ConnectionClosed
 
+from .client_errors import SimplexConnectionError
 from simplex_python.queue import ABQueue
 from simplex_python.responses import CommandResponse
 
@@ -86,14 +88,28 @@ class WSTransport(Transport[bytes | str, bytes | str]):
         cls, url: str, timeout: float = 10.0, qsize: int = 100
     ) -> "WSTransport":
         """Establish a new WebSocket connection and return a transport."""
-        ws = await websockets.connect(url)
-        return cls(ws, timeout, qsize)
+        try:
+            ws = await websockets.connect(url)
+            return cls(ws, timeout, qsize)
+        except OSError as e:
+            # Re-raise with more meaningful error message for better user experience
+            raise SimplexConnectionError(
+                "Failed to establish WebSocket connection", 
+                url, 
+                e
+            ) from e
+        except Exception as e:
+            raise SimplexConnectionError(
+                "Unexpected error during WebSocket connection", 
+                url, 
+                e
+            ) from e
 
     async def _reader(self):
         try:
             async for msg in self.ws:
                 await self.queue.enqueue(msg)
-        except websockets.ConnectionClosed:
+        except ConnectionClosed:
             pass
         finally:
             await self.queue.close()

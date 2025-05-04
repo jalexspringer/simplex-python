@@ -8,6 +8,8 @@ Demonstrates:
 3. Listing all users and accessing user properties
 4. Changing the active user
 5. Creating a new user account
+6. Configuring user profile address
+7. Deleting a user account
 """
 
 import asyncio
@@ -16,7 +18,12 @@ import random
 import string
 from typing import Optional
 from simplex_python.client import SimplexClient
-from simplex_python.responses import ActiveUserResponse, UsersListResponse
+from simplex_python.responses import (
+    ActiveUserResponse,
+    UserProfileUpdatedResponse,
+    UserProfileNoChangeResponse,
+)
+from simplex_python.responses.base import CmdOkResponse
 from simplex_python.client_errors import SimplexCommandError
 
 # Set up logging
@@ -36,131 +43,59 @@ async def main():
     async with SimplexClient(SERVER_URL) as client:
         print("Connected to Simplex server")
 
-        # --- Get Active User ---
-        active_user: Optional[ActiveUserResponse] = await client.users.get_active()
-        if active_user:
-            print("\n=== Active User Information ===")
-            print(f"User ID: {active_user.user_id}")
-            print(f"Display Name: {active_user.display_name}")
-            print(f"Full Name: {active_user.full_name}")
-        else:
-            print("No active user found")
+        # --- Demonstrate Listing Users ---
+        print("\n=== Found", await client.users.list_users())
+        await client.users.create_active_user("ME!", "REALLY ME")
+        # --- Demonstrate User Deletion ---
+        # List users before deletion
+        users_before = await client.users.list_users()
+        print(f"\n=== Found {users_before} users before deletion ===")
 
-        # --- List All Users ---
+        test_user_id = 2
+        print(f"\n=== Deleting user (ID: {test_user_id}) ===")
         try:
-            users: UsersListResponse = await client.users.list_users()
+            # Make sure we're not deleting the active user to avoid complications
+            current_active = await client.users.get_active()
+            if current_active.user_id == test_user_id:
+                # Find another user to switch to
+                for user in users_before:
+                    if user.user_id != test_user_id:
+                        print(f"Switching to user {user.display_name} before deletion")
+                        await client.users.set_active(user.user_id)
+                        break
 
-            print(f"\n=== Found {len(users)} Users ===")
+            # Delete the test user
+            result = await client.users.delete_user(test_user_id)
 
-            # Iterate through all users
-            for i, user in enumerate(users):
-                print(f"\nUser {i + 1}:")
-                print(f"  ID: {user.user_id}")
-                print(f"  Display Name: {user.display_name}")
-                print(f"  Full Name: {user.full_name}")
-                print(f"  Active: {'Yes' if user.active_user else 'No'}")
-                print(f"  Unread Messages: {user.unread_count}")
-
-                # Show preferences example
-                if user.preferences:
-                    print("  Preferences:")
-                    for pref_name, pref_value in user.preferences.items():
-                        print(f"    {pref_name}: {pref_value}")
-
-        except Exception as e:
-            print(f"Error listing users: {e}")
-
-        # --- Demonstrate Changing Active User ---
-        try:
-            # Find a non-active user to switch to
-            non_active_user = None
-            for user in users:
-                if not user.active_user:
-                    non_active_user = user
-                    break
-
-            if non_active_user:
-                print(
-                    f"\n=== Switching to User: {non_active_user.display_name} (ID: {non_active_user.user_id}) ==="
-                )
-
-                # Set as active user
-                new_active = await client.users.set_active(non_active_user.user_id)
-
-                print(f"Successfully switched to user: {new_active.display_name}")
-                print(f"User ID: {new_active.user_id}")
-                print(f"Full Name: {new_active.full_name}")
-
-                active_user: Optional[
-                    ActiveUserResponse
-                ] = await client.users.get_active()
-                if active_user:
-                    print("\n=== Active User Information ===")
-                    print(f"User ID: {active_user.user_id}")
-                    print(f"Display Name: {active_user.display_name}")
-                    print(f"Full Name: {active_user.full_name}")
-                else:
-                    print("No active user found")
-
-                # Switch back to original user
-                if active_user:
-                    print(
-                        f"\n=== Switching back to original user: {active_user.display_name} ==="
-                    )
-                    await client.users.set_active(active_user.user_id)
-                    print("Switched back to original user")
+            # Handle both possible success response types
+            if isinstance(result, ActiveUserResponse):
+                print(f"User deleted, new active user is: {result.display_name}")
+            elif isinstance(result, CmdOkResponse):
+                print("User deleted successfully")
             else:
-                print("\nNo non-active users found to demonstrate switching")
-
-        except Exception as e:
-            print(f"Error changing active user: {e}")
-
-        # --- Demonstrate Creating a New User ---
-        try:
-            # Generate a random username to avoid conflicts
-            random_suffix = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
-            display_name = f"TestUser_{random_suffix}"
-            full_name = f"Test User {random_suffix}"
-
-            print(f"\n=== Creating New User: {display_name} ===")
-
-            # Create new user
-            new_user = await client.users.create_active_user(
-                display_name=display_name,
-                full_name=full_name
-            )
-
-            print(f"Successfully created user:")
-            print(f"  User ID: {new_user.user_id}")
-            print(f"  Display Name: {new_user.display_name}")
-            print(f"  Full Name: {new_user.full_name}")
-
-            # Try to create the same user again to demonstrate error handling
-            print(f"\n=== Attempting to create duplicate user {display_name} ===")
-            try:
-                duplicate_user = await client.users.create_active_user(
-                    display_name=display_name,
-                    full_name=full_name
+                print(
+                    f"User deletion completed with response type: {type(result).__name__}"
                 )
-            except SimplexCommandError as e:
-                # Parse the error to check if it's a "userExists" error
-                if hasattr(e, 'error') and isinstance(e.error, dict):
-                    error_type = e.error.get('errorType', {})
-                    if isinstance(error_type, dict) and error_type.get('type') == 'userExists':
-                        print(f"User already exists: {error_type.get('contactName')}")
-                    else:
-                        print(f"Error creating user: {e}")
-                else:
-                    print(f"Error creating user: {e}")
 
-            # Switch back to the original user if we had one
-            if active_user and active_user.user_id != new_user.user_id:
-                print(f"\n=== Switching back to original user: {active_user.display_name} ===")
-                await client.users.set_active(active_user.user_id)
-                print("Switched back to original user")
+            # Verify deletion by listing users again
+            users_after = await client.users.list_users()
+            print(f"\n=== Found {len(users_after)} users after deletion ===")
 
-        except Exception as e:
-            print(f"Error creating user: {e}")
+            # Check if user still exists (shouldn't, but verify)
+            for user in users_after:
+                if user.user_id == test_user_id:
+                    print(
+                        f"Warning: User with ID {test_user_id} still exists after deletion"
+                    )
+                    break
+            else:
+                print(f"Success: User with ID {test_user_id} was deleted completely")
+
+        except SimplexCommandError as e:
+            if "userUnknown" in str(e):
+                print(f"Error: User with ID {test_user_id} doesn't exist")
+            else:
+                print(f"Error deleting user: {e}")
 
 
 if __name__ == "__main__":

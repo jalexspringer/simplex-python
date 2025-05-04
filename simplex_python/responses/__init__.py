@@ -260,6 +260,9 @@ ConnectionResponse = (
 # Register response types with the factory
 def _register_response_types():
     """Register all response types with the ResponseFactory."""
+    # Common base responses
+    ResponseFactory.register_response_type("cmdOk", CmdOkResponse)
+    
     # User responses
     ResponseFactory.register_response_type("activeUser", ActiveUserResponse)
     ResponseFactory.register_response_type("usersList", UsersListResponse)

@@ -21,7 +21,11 @@ from .queue import ABQueue
 from .commands import SimplexCommand
 from .responses import CommandResponse, ResponseFactory
 from .transport import ChatServer, ChatTransport, ChatSrvRequest
-from .client_errors import SimplexClientError, SimplexCommandError
+from .client_errors import (
+    SimplexClientError,
+    SimplexCommandError,
+    SimplexConnectionError,
+)
 
 if TYPE_CHECKING:
     from .clients.users import UsersClient
@@ -98,13 +102,27 @@ class SimplexClient:
         if self._connected:
             return
 
-        self._transport = await ChatTransport.connect(
-            self._server, timeout=self._timeout, qsize=self._qsize
-        )
-        self._event_q = ABQueue[CommandResponse](self._qsize)
-        self._recv_task = asyncio.create_task(self._recv_loop())
-        self._connected = True
-        logger.info("Connected to chat server")
+        try:
+            self._transport = await ChatTransport.connect(
+                self._server, timeout=self._timeout, qsize=self._qsize
+            )
+            self._event_q = ABQueue[CommandResponse](self._qsize)
+            self._recv_task = asyncio.create_task(self._recv_loop())
+            self._connected = True
+            logger.info("Connected to chat server")
+        except OSError as e:
+            # This is likely a connection error - provide helpful information
+            if "Connect call failed" in str(e):
+                raise SimplexConnectionError("Connection refused", self._server, e)
+            elif "Name or service not known" in str(e):
+                raise SimplexConnectionError("Host not found", self._server, e)
+            else:
+                raise SimplexConnectionError("Connection error", self._server, e)
+        except Exception as e:
+            # For other errors, still use our custom error but with the original exception
+            raise SimplexConnectionError(
+                "Unexpected error while connecting", self._server, e
+            )
 
     async def disconnect(self) -> None:
         """Disconnect from the chat server and clean up resources."""
@@ -173,15 +191,58 @@ class SimplexClient:
             try:
                 raw_resp = await asyncio.wait_for(fut, self._timeout)
 
-                # Handle error responses first, before trying to create typed responses
-                if isinstance(raw_resp, dict) and raw_resp.get("type") == "chatCmdError":
+                # Handle error responses
+                if raw_resp.get("type") == "chatCmdError":
                     error_info = raw_resp.get("chatError", {})
-                    error_msg = f"Command error: {error_info.get('type', 'unknown')}"
+                    error_type = error_info.get("type", "unknown")
+                    print("ERROR: ", error_info)
+
+                    # Provide more specific error information for store errors
+                    if error_type == "errorStore" and isinstance(
+                        error_info.get("storeError"), dict
+                    ):
+                        store_error = error_info.get("storeError", {})
+                        store_error_type = store_error.get("type")
+
+                        # Convert raw response to a StoreErrorType for enhanced detection
+                        from .responses.base import StoreErrorType
+
+                        store_error_obj = StoreErrorType(
+                            type="errorStore", storeError=store_error
+                        )
+
+                        # For certain error types, return a response object instead of raising an exception
+                        # This allows domain-specific clients to handle these errors in a custom way
+                        if (
+                            store_error_obj.is_contact_link_not_found_error()
+                            or store_error_obj.is_duplicate_contact_link_error()
+                        ):
+                            logger.debug(
+                                f"Returning store error as response: {store_error_type}"
+                            )
+                            return store_error_obj
+
+                        # Check for specific store error types and provide helpful suggestions
+                        if store_error_obj.is_contact_link_not_found_error():
+                            error_msg = "Command error: No chat address exists. Create one first with client.users.create_profile_address()"
+                        elif store_error_obj.is_duplicate_contact_link_error():
+                            error_msg = "Command error: Chat address already exists. Use client.users.show_profile_address() to view it"
+                        elif store_error_type:
+                            error_msg = (
+                                f"Command error: {error_type} - {store_error_type}"
+                            )
+                        else:
+                            error_msg = f"Command error: {error_type}"
+                    elif error_type == "error":
+                        error_msg = f"ChatError: {error_info['errorType']['type']}"
+                    else:
+                        error_msg = f"Command error: {error_type}"
+
                     raise SimplexCommandError(error_msg, raw_resp)
-                
+
                 # Use ResponseFactory to create the appropriate response object
                 typed_resp = ResponseFactory.create(raw_resp)
-                
+
                 return typed_resp
             except asyncio.TimeoutError:
                 error_msg = f"Timeout waiting for response to command: {cmd_str}"

@@ -5,18 +5,24 @@ Provides a fluent API for user-related operations.
 """
 
 import logging
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, Union
 
 from simplex_python.responses import (
     ActiveUserResponse,
     UsersListResponse,
+    UserProfileUpdatedResponse,
+    UserProfileNoChangeResponse,
 )
+from simplex_python.responses.base import StoreErrorType, CmdOkResponse
 from ..commands import (
     ShowActiveUser,
     ListUsers,
     APISetActiveUser,
     CreateActiveUser,
     Profile,
+    SetProfileAddress,
+    CreateMyAddress,
+    APIDeleteUser,  # Import the new command
 )
 from ..client_errors import SimplexCommandError
 
@@ -41,12 +47,18 @@ class UsersClient:
         """
         self._client = client
 
-    async def get_active(self) -> Optional[ActiveUserResponse]:
+    async def get_active(
+        self, include_contact_link: bool = True
+    ) -> Optional[ActiveUserResponse]:
         """
         Get the currently active user profile.
 
+        Args:
+            include_contact_link: Whether to check and include the user's contact link if it exists (default: True)
+
         Returns:
             ActiveUserResponse containing the user profile object, or None if no active user exists.
+            If include_contact_link is True and the user has a contact link, it will be included in the response.
 
         Raises:
             SimplexCommandError: If there was an error executing the command.
@@ -68,8 +80,46 @@ class UsersClient:
             ):
                 return None
 
-        # If we got back a proper ActiveUserResponse, return it
+        # If we got back a proper ActiveUserResponse, process it
         if isinstance(resp, ActiveUserResponse):
+            # If requested, try to get the contact link for the user
+            if include_contact_link and "contactLink" not in resp.profile:
+                try:
+                    # Check if the user has a contact link
+                    from ..commands.users import ShowMyAddress
+
+                    address_resp = await self._client.send_command(
+                        ShowMyAddress(type="showMyAddress")
+                    )
+
+                    # Extract the contact link - could be in different formats
+                    contact_link = None
+                    if hasattr(address_resp, "contactLink"):
+                        if isinstance(address_resp.contactLink, str):
+                            contact_link = address_resp.contactLink
+                        elif (
+                            isinstance(address_resp.contactLink, dict)
+                            and "connLinkContact" in address_resp.contactLink
+                        ):
+                            # Extract from nested dictionary
+                            if "connFullLink" in address_resp.contactLink.get(
+                                "connLinkContact", {}
+                            ):
+                                contact_link = address_resp.contactLink[
+                                    "connLinkContact"
+                                ]["connFullLink"]
+
+                    # Only update if we found a valid link
+                    if contact_link:
+                        # Update the profile to include the contact link
+                        resp.profile["contactLink"] = contact_link
+                        # Also update the original user data for backward compatibility
+                        if "profile" in resp.user:
+                            resp.user["profile"]["contactLink"] = contact_link
+                except Exception as e:
+                    # Don't fail the whole operation if we can't get the contact link
+                    logger.debug(f"Failed to get contact link for active user: {e}")
+
             return resp
 
         # If we received some other type, raise an error
@@ -77,21 +127,32 @@ class UsersClient:
         logger.error(error_msg)
         raise SimplexCommandError(error_msg, resp)
 
-    async def list_users(self) -> UsersListResponse:
+    async def list_users(
+        self, include_contact_links: bool = False
+    ) -> UsersListResponse:
         """
         List all users in the SimpleX Chat system.
 
         This method retrieves information about all users configured in the
         system, including their profiles, unread counts, and active status.
 
+        Args:
+            include_contact_links: Whether to fetch and include contact links for each user (default: False).
+                                  Note that enabling this option will switch to each user to fetch their contact link,
+                                  which could be slower with many users.
+
         Returns:
             UsersListResponse containing a list of user items with detailed information.
             The response is iterable and supports indexing to access individual UserItem objects.
+            If include_contact_links is True, each user's profile will include their contact link if available.
 
         Example:
             ```python
-            # Get all users
+            # Get all users without contact links (faster)
             users = await client.users.list_users()
+
+            # Get all users with their contact links (slower but more complete)
+            users_with_links = await client.users.list_users(include_contact_links=True)
 
             # Print number of users
             print(f"Found {len(users)} users")
@@ -101,6 +162,8 @@ class UsersClient:
                 print(f"User: {user.display_name} (ID: {user.user_id})")
                 print(f"Active: {user.active_user}")
                 print(f"Unread messages: {user.unread_count}")
+                if 'contactLink' in user.profile:
+                    print(f"Contact Link: {user.profile.get('contactLink')}")
 
             # Access by index
             first_user = users[0]
@@ -118,8 +181,114 @@ class UsersClient:
             logger.error(error_msg)
             raise SimplexCommandError(error_msg, resp)
 
-        # If we got back a proper UsersListResponse, return it
+        # If we got back a proper UsersListResponse, process it
         if isinstance(resp, UsersListResponse):
+            # If requested, fetch contact links for each user
+            if include_contact_links:
+                # Remember the current active user ID to restore later
+                current_active = await self.get_active(include_contact_link=False)
+                current_active_id = current_active.user_id if current_active else None
+
+                try:
+                    # Import here to avoid circular imports
+                    from ..commands.users import ShowMyAddress
+
+                    # For each user in the list, switch to them and get their contact link
+                    for user_item in resp:
+                        if user_item.user_id == current_active_id:
+                            # For the already active user, we can just get their contact link directly
+                            try:
+                                address_resp = await self._client.send_command(
+                                    ShowMyAddress(type="showMyAddress")
+                                )
+                                # Extract the contact link - could be in different formats
+                                contact_link = None
+                                if hasattr(address_resp, "contactLink"):
+                                    if isinstance(address_resp.contactLink, str):
+                                        contact_link = address_resp.contactLink
+                                    elif (
+                                        isinstance(address_resp.contactLink, dict)
+                                        and "connLinkContact"
+                                        in address_resp.contactLink
+                                    ):
+                                        # Extract from nested dictionary
+                                        if (
+                                            "connFullLink"
+                                            in address_resp.contactLink.get(
+                                                "connLinkContact", {}
+                                            )
+                                        ):
+                                            contact_link = address_resp.contactLink[
+                                                "connLinkContact"
+                                            ]["connFullLink"]
+                                # Only update if we found a valid link
+                                if contact_link:
+                                    user_item.profile["contactLink"] = contact_link
+                                    if "profile" in user_item.user:
+                                        user_item.user["profile"]["contactLink"] = (
+                                            contact_link
+                                        )
+                            except Exception as e:
+                                logger.debug(
+                                    f"Failed to get contact link for active user {user_item.display_name}: {e}"
+                                )
+                        else:
+                            # For other users, we need to switch to them first
+                            try:
+                                # Switch to this user
+                                await self.set_active(user_item.user_id)
+
+                                # Get their contact link
+                                address_resp = await self._client.send_command(
+                                    ShowMyAddress(type="showMyAddress")
+                                )
+                                # Extract the contact link - could be in different formats
+                                contact_link = None
+                                if hasattr(address_resp, "contactLink"):
+                                    if isinstance(address_resp.contactLink, str):
+                                        contact_link = address_resp.contactLink
+                                    elif (
+                                        isinstance(address_resp.contactLink, dict)
+                                        and "connLinkContact"
+                                        in address_resp.contactLink
+                                    ):
+                                        # Extract from nested dictionary
+                                        if (
+                                            "connFullLink"
+                                            in address_resp.contactLink.get(
+                                                "connLinkContact", {}
+                                            )
+                                        ):
+                                            contact_link = address_resp.contactLink[
+                                                "connLinkContact"
+                                            ]["connFullLink"]
+                                # Only update if we found a valid link
+                                if contact_link:
+                                    user_item.profile["contactLink"] = contact_link
+                                    if "profile" in user_item.user:
+                                        user_item.user["profile"]["contactLink"] = (
+                                            contact_link
+                                        )
+                            except Exception as e:
+                                logger.debug(
+                                    f"Failed to get contact link for user {user_item.display_name}: {e}"
+                                )
+
+                    # Restore the original active user
+                    if current_active_id is not None:
+                        await self.set_active(current_active_id)
+
+                except Exception as e:
+                    logger.warning(f"Failed to include contact links for users: {e}")
+                    # If we switch users but fail, try to restore the original active user
+                    if current_active_id is not None:
+                        try:
+                            await self.set_active(current_active_id)
+                        except Exception as restore_error:
+                            logger.error(
+                                f"Failed to restore original active user: {restore_error}"
+                            )
+
             return resp
 
         # If we received some other type, raise an error
@@ -177,34 +346,36 @@ class UsersClient:
         raise SimplexCommandError(error_msg, resp)
 
     async def create_active_user(
-        self, 
-        display_name: str, 
-        full_name: str, 
+        self,
+        display_name: str,
+        full_name: str,
         same_servers: bool = True,
-        past_timestamp: bool = False
+        past_timestamp: bool = False,
+        create_profile_address: bool = True,
     ) -> ActiveUserResponse:
         """
         Create a new user profile and set it as active.
-        
-        This method creates a new user with the specified profile information and 
+
+        This method creates a new user with the specified profile information and
         sets it as the active user. If a user with the specified display name already
         exists, a SimplexCommandError will be raised with a userExists error type.
-        
+
         Args:
             display_name: The display name for the new user
             full_name: The full name for the new user
             same_servers: Whether to use the same servers as existing users (default: True)
             past_timestamp: Whether to use a past timestamp for the user (default: False)
-            
+            create_profile_address: Whether to automatically create a profile address for the user (default: True)
+
         Returns:
             ActiveUserResponse containing information about the newly created user
-            
+
         Example:
             ```python
             try:
                 # Create a new user
                 new_user = await client.users.create_active_user(
-                    display_name="Alice", 
+                    display_name="Alice",
                     full_name="Alice Smith"
                 )
                 print(f"Created user: {new_user.display_name} (ID: {new_user.user_id})")
@@ -214,16 +385,13 @@ class UsersClient:
                 else:
                     raise
             ```
-            
+
         Raises:
             SimplexCommandError: If there was an error creating the user, including if the user already exists
         """
         # Create profile for the new user using our strongly-typed Profile class
-        profile = Profile(
-            displayName=display_name,
-            fullName=full_name
-        )
-        
+        profile = Profile(displayName=display_name, fullName=full_name)
+
         # Create the command with the typed profile object
         # The profile is properly serialized by the command formatter
         # using the to_dict method we've defined
@@ -231,7 +399,216 @@ class UsersClient:
             type="createActiveUser",
             profile=profile,
             sameServers=same_servers,
-            pastTimestamp=past_timestamp
+            pastTimestamp=past_timestamp,
+        )
+
+        # Send the command
+        resp = await self._client.send_command(cmd)
+        print(resp)
+
+        # If we got None back, that's unexpected for this command
+        if resp is None:
+            error_msg = f"Failed to create user {display_name}: No response"
+            logger.error(error_msg)
+            raise SimplexCommandError(error_msg, resp)
+
+        # If we got back a proper ActiveUserResponse, store it
+        if not isinstance(resp, ActiveUserResponse):
+            # If we received some other type, raise an error
+            error_msg = f"Failed to create user {display_name}: Unexpected response type {getattr(resp, 'type', 'unknown')}"
+            logger.error(error_msg)
+            raise SimplexCommandError(error_msg, resp)
+
+        user_resp = resp
+
+        # Create profile address if requested
+        if create_profile_address:
+            try:
+                # First, create the contact address
+                create_cmd = CreateMyAddress(type="createMyAddress")
+                await self._client.send_command(create_cmd)
+
+                # Then, include it in the profile
+                await self.set_profile_address(enabled=True)
+
+                logger.info(
+                    f"Successfully created profile address for new user {display_name}"
+                )
+            except SimplexCommandError as e:
+                # Log the error but don't fail the whole operation
+                logger.warning(
+                    f"Failed to create profile address for user {display_name}: {e}"
+                )
+                # We don't re-raise the exception since the user was created successfully
+
+        return user_resp
+
+    async def set_profile_address(
+        self, enabled: bool = True, create_if_missing: bool = True
+    ) -> Union[UserProfileUpdatedResponse, UserProfileNoChangeResponse]:
+        """
+        Enable or disable the contact address in the active user's profile.
+
+        When enabled, this creates a shareable contact address that others can
+        use to connect with the user. The address will be included in the user's
+        profile and can be shared with others.
+
+        Args:
+            enabled: Whether to enable (True) or disable (False) the profile address
+            create_if_missing: Whether to create the contact address if it doesn't exist (default: True)
+
+        Returns:
+            UserProfileUpdatedResponse containing the updated profile information when there's a change,
+            or UserProfileNoChangeResponse when there's no change to be made.
+
+        Example:
+            ```python
+            # Enable profile address
+            profile_update = await client.users.set_profile_address(enabled=True)
+            if isinstance(profile_update, UserProfileUpdatedResponse):
+                print(f"Profile address enabled: {profile_update.toProfile.get('contactLink')}")
+
+            # Disable profile address
+            profile_update = await client.users.set_profile_address(enabled=False)
+            if isinstance(profile_update, UserProfileNoChangeResponse):
+                print("No change needed to profile address")
+            ```
+
+        Raises:
+            SimplexCommandError: If there was an error updating the profile
+        """
+        # Create the command
+        cmd = SetProfileAddress(type="setProfileAddress", includeInProfile=enabled)
+
+        # Send the command
+        resp = await self._client.send_command(cmd)
+
+        # If we got None back, that's unexpected for this command
+        if resp is None:
+            action = "enable" if enabled else "disable"
+            error_msg = f"Failed to {action} profile address: No response"
+            logger.error(error_msg)
+            raise SimplexCommandError(error_msg, resp)
+
+        # If we got back a proper response, return it
+        if isinstance(resp, (UserProfileUpdatedResponse, UserProfileNoChangeResponse)):
+            return resp
+
+        # Special handling for store errors when working with profile addresses
+        if isinstance(resp, StoreErrorType):
+            if enabled:
+                # When enabling: Handle both duplicate and not found cases
+                if resp.is_duplicate_contact_link_error():
+                    logger.info(
+                        "Profile address already exists, returning no change response"
+                    )
+                    return UserProfileNoChangeResponse(type="userProfileNoChange")
+
+                # When 'contact link not found' error happens, it means the user doesn't have one
+                # Attempt to create it first if requested
+                if resp.is_contact_link_not_found_error() and create_if_missing:
+                    try:
+                        # First, create the contact address
+                        logger.info("Profile address not found, creating one")
+                        create_cmd = CreateMyAddress(type="createMyAddress")
+                        await self._client.send_command(create_cmd)
+
+                        # Then, try to include it in the profile again
+                        logger.info("Retrying profile address inclusion")
+                        return await self.set_profile_address(
+                            enabled=True, create_if_missing=False
+                        )
+                    except SimplexCommandError as e:
+                        # If we failed to create the address, include that in the error
+                        error_msg = f"Failed to create profile address: {e}"
+                        logger.error(error_msg)
+                        raise SimplexCommandError(error_msg, resp)
+
+                if resp.is_contact_link_not_found_error():
+                    error_msg = "Cannot enable profile address: User doesn't have a contact link"
+                    logger.info(error_msg)
+                    # This is a valid error case, but we choose to create a UserProfileNoChangeResponse
+                    # to maintain consistency with how we handle other cases
+                    return UserProfileNoChangeResponse(type="userProfileNoChange")
+            else:
+                # When disabling: We treat 'contact link not found' as a no-change situation
+                # (can't disable what doesn't exist)
+                if resp.is_contact_link_not_found_error():
+                    logger.info(
+                        "Profile address doesn't exist, returning no change response"
+                    )
+                    return UserProfileNoChangeResponse(type="userProfileNoChange")
+
+        # If we received some other type, raise an error
+        action = "enable" if enabled else "disable"
+        error_msg = f"Failed to {action} profile address: Unexpected response type {getattr(resp, 'type', 'unknown')}"
+        logger.error(error_msg)
+        raise SimplexCommandError(error_msg, resp)
+
+    async def delete_user(
+        self, user_id: int, delete_smp_queues: bool = True, view_pwd: Optional[str] = None
+    ) -> Union[ActiveUserResponse, "CmdOkResponse"]:
+        """
+        Delete a user from the SimpleX Chat system.
+
+        This permanently removes the user account and optionally its associated SMP queues.
+        If the user is hidden, the view password must be provided.
+        
+        IMPORTANT: You cannot delete the currently active user. You must first switch to another
+        user with set_active() before deleting a user. Attempting to delete the active user
+        will result in a SimplexCommandError with 'cantDeleteActiveUser' error.
+
+        Args:
+            user_id: The ID of the user to delete
+            delete_smp_queues: Whether to delete the user's SMP queues (default: True)
+            view_pwd: Optional view password for hidden users
+
+        Returns:
+            ActiveUserResponse containing information about the new active user (if deletion caused a switch)
+            or CmdOkResponse if the deletion was successful but no user switch occurred
+
+        Example:
+            ```python
+            # Get current user before deletion to ensure we're not deleting the active user
+            active_user = await client.users.get_active()
+            
+            # Only proceed if we're attempting to delete a different user
+            if active_user.user_id != user_id_to_delete:
+                result = await client.users.delete_user(user_id_to_delete)
+                if isinstance(result, ActiveUserResponse):
+                    print(f"Deleted user, now active user is: {result.display_name}")
+                else:
+                    print("User deleted successfully")
+            else:
+                # Switch to another user first
+                users = await client.users.list_users()
+                for user in users:
+                    if user.user_id != active_user.user_id:
+                        await client.users.set_active(user.user_id)
+                        await client.users.delete_user(user_id_to_delete)
+                        break
+            ```
+
+        Raises:
+            SimplexCommandError: If there was an error executing the command (e.g., user ID is invalid)
+                                 or if attempting to delete the currently active user.
+        """
+        from ..responses.base import CmdOkResponse
+        
+        # Check if we're trying to delete the active user - this will fail with an error
+        # but we can provide a better error message by checking first
+        active_user = await self.get_active(include_contact_link=False)
+        if active_user and active_user.user_id == user_id:
+            error_msg = f"Cannot delete the active user (ID: {user_id}). Switch to a different user first with set_active()."
+            logger.error(error_msg)
+            raise ValueError(error_msg)
+            
+        # Create the command
+        cmd = APIDeleteUser(
+            type="apiDeleteUser", 
+            userId=user_id, 
+            delSMPQueues=delete_smp_queues,
+            viewPwd=view_pwd
         )
         
         # Send the command
@@ -239,15 +616,15 @@ class UsersClient:
         
         # If we got None back, that's unexpected for this command
         if resp is None:
-            error_msg = f"Failed to create user {display_name}: No response"
+            error_msg = f"Failed to delete user {user_id}: No response"
             logger.error(error_msg)
             raise SimplexCommandError(error_msg, resp)
-            
-        # If we got back a proper ActiveUserResponse, return it
-        if isinstance(resp, ActiveUserResponse):
+        
+        # If we got back a proper ActiveUserResponse or CmdOkResponse, return it
+        if isinstance(resp, (ActiveUserResponse, CmdOkResponse)):
             return resp
-            
+        
         # If we received some other type, raise an error
-        error_msg = f"Failed to create user {display_name}: Unexpected response type {getattr(resp, 'type', 'unknown')}"
+        error_msg = f"Failed to delete user {user_id}: Unexpected response type {getattr(resp, 'type', 'unknown')}"
         logger.error(error_msg)
         raise SimplexCommandError(error_msg, resp)
