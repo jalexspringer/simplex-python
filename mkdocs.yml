@@ -21,3 +21,9 @@ nav:
   - API Reference:
     - Client: api/client.md
     - Users Client: api/users.md
+
+
+# Add this to your existing mkdocs.yml file
+repo_url: https://github.com/jalexspringer/simplex-python
+edit_uri: edit/main/docs/
+site_url: https://jalexspringer.github.io/simplex-python/
