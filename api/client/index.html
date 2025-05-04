@@ -1,0 +1,3327 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../..">
+      
+      
+        <link rel="next" href="../users/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.12">
+    
+    
+      
+        <title>Client - SimplexPython SDK</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.2afb09e1.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#client-api" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="SimplexPython SDK" class="md-header__button md-logo" aria-label="SimplexPython SDK" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SimplexPython SDK
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Client
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="SimplexPython SDK" class="md-nav__button md-logo" aria-label="SimplexPython SDK" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SimplexPython SDK
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Client
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Client
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#simplexclient" class="md-nav__link">
+    <span class="md-ellipsis">
+      SimplexClient
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient" class="md-nav__link">
+    <span class="md-ellipsis">
+      SimplexClient
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SimplexClient">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.chats" class="md-nav__link">
+    <span class="md-ellipsis">
+      chats
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.connected" class="md-nav__link">
+    <span class="md-ellipsis">
+      connected
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.connections" class="md-nav__link">
+    <span class="md-ellipsis">
+      connections
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.database" class="md-nav__link">
+    <span class="md-ellipsis">
+      database
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.files" class="md-nav__link">
+    <span class="md-ellipsis">
+      files
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      groups
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.users" class="md-nav__link">
+    <span class="md-ellipsis">
+      users
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      connect
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.disconnect" class="md-nav__link">
+    <span class="md-ellipsis">
+      disconnect
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.events" class="md-nav__link">
+    <span class="md-ellipsis">
+      events
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.send_command" class="md-nav__link">
+    <span class="md-ellipsis">
+      send_command
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chattransport" class="md-nav__link">
+    <span class="md-ellipsis">
+      ChatTransport
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simplex_python.transport.ChatTransport" class="md-nav__link">
+    <span class="md-ellipsis">
+      ChatTransport
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ChatTransport">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.transport.ChatTransport.connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      connect
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.transport.ChatTransport.write" class="md-nav__link">
+    <span class="md-ellipsis">
+      write
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error Types
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simplex_python.client_errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      client_errors
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client_errors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client_errors.SimplexClientError" class="md-nav__link">
+    <span class="md-ellipsis">
+      SimplexClientError
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client_errors.SimplexCommandError" class="md-nav__link">
+    <span class="md-ellipsis">
+      SimplexCommandError
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SimplexCommandError">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client_errors.SimplexCommandError.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client_errors.SimplexConnectionError" class="md-nav__link">
+    <span class="md-ellipsis">
+      SimplexConnectionError
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SimplexConnectionError">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client_errors.SimplexConnectionError.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../users/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Users Client
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#simplexclient" class="md-nav__link">
+    <span class="md-ellipsis">
+      SimplexClient
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient" class="md-nav__link">
+    <span class="md-ellipsis">
+      SimplexClient
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SimplexClient">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.chats" class="md-nav__link">
+    <span class="md-ellipsis">
+      chats
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.connected" class="md-nav__link">
+    <span class="md-ellipsis">
+      connected
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.connections" class="md-nav__link">
+    <span class="md-ellipsis">
+      connections
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.database" class="md-nav__link">
+    <span class="md-ellipsis">
+      database
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.files" class="md-nav__link">
+    <span class="md-ellipsis">
+      files
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      groups
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.users" class="md-nav__link">
+    <span class="md-ellipsis">
+      users
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      connect
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.disconnect" class="md-nav__link">
+    <span class="md-ellipsis">
+      disconnect
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.events" class="md-nav__link">
+    <span class="md-ellipsis">
+      events
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client.SimplexClient.send_command" class="md-nav__link">
+    <span class="md-ellipsis">
+      send_command
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chattransport" class="md-nav__link">
+    <span class="md-ellipsis">
+      ChatTransport
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simplex_python.transport.ChatTransport" class="md-nav__link">
+    <span class="md-ellipsis">
+      ChatTransport
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ChatTransport">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.transport.ChatTransport.connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      connect
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.transport.ChatTransport.write" class="md-nav__link">
+    <span class="md-ellipsis">
+      write
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error Types
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simplex_python.client_errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      client_errors
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client_errors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client_errors.SimplexClientError" class="md-nav__link">
+    <span class="md-ellipsis">
+      SimplexClientError
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client_errors.SimplexCommandError" class="md-nav__link">
+    <span class="md-ellipsis">
+      SimplexCommandError
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SimplexCommandError">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client_errors.SimplexCommandError.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client_errors.SimplexConnectionError" class="md-nav__link">
+    <span class="md-ellipsis">
+      SimplexConnectionError
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SimplexConnectionError">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simplex_python.client_errors.SimplexConnectionError.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="client-api">Client API</h1>
+<p>The Client API provides the main entry point for interacting with the SimpleX Chat server.</p>
+<h2 id="simplexclient">SimplexClient</h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="simplex_python.client.SimplexClient" class="doc doc-heading">
+            <code>simplex_python.client.SimplexClient</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents first">
+
+
+        <p>High-level async client for the Simplex chat protocol with domain-specific clients.</p>
+
+
+<details class="example-usage" open>
+  <summary>Example usage</summary>
+  <p>async with SimplexClient(server_or_url) as client:
+    # User operations
+    user = await client.users.get_active()
+    # Group operations
+    group = await client.groups.create("Project Team")
+    # Chat operations
+    await client.chats.send_message(456, "Hello, world!")
+    # File operations
+    await client.files.set_files_folder("/path/to/downloads")
+    # Database operations
+    await client.database.export_archive("/path/to/backup.simplex")
+    # Connection operations
+    await client.connections.accept_contact(123)
+    # Listen for events
+    async for event in client.events():
+        handle_event(event)</p>
+</details>
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>simplex_python/client.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span>
+<span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span>
+<span class="normal">357</span>
+<span class="normal">358</span>
+<span class="normal">359</span>
+<span class="normal">360</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SimplexClient</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    High-level async client for the Simplex chat protocol with domain-specific clients.</span>
+
+<span class="sd">    Example usage:</span>
+<span class="sd">        async with SimplexClient(server_or_url) as client:</span>
+<span class="sd">            # User operations</span>
+<span class="sd">            user = await client.users.get_active()</span>
+<span class="sd">            # Group operations</span>
+<span class="sd">            group = await client.groups.create(&quot;Project Team&quot;)</span>
+<span class="sd">            # Chat operations</span>
+<span class="sd">            await client.chats.send_message(456, &quot;Hello, world!&quot;)</span>
+<span class="sd">            # File operations</span>
+<span class="sd">            await client.files.set_files_folder(&quot;/path/to/downloads&quot;)</span>
+<span class="sd">            # Database operations</span>
+<span class="sd">            await client.database.export_archive(&quot;/path/to/backup.simplex&quot;)</span>
+<span class="sd">            # Connection operations</span>
+<span class="sd">            await client.connections.accept_contact(123)</span>
+<span class="sd">            # Listen for events</span>
+<span class="sd">            async for event in client.events():</span>
+<span class="sd">                handle_event(event)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ChatServer</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">qsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            server: ChatServer object or WebSocket URL to connect to.</span>
+<span class="sd">            timeout: Connection and command timeout in seconds.</span>
+<span class="sd">            qsize: Max size of the event queue.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span> <span class="o">=</span> <span class="n">server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_qsize</span> <span class="o">=</span> <span class="n">qsize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ChatTransport</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_event_q</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ABQueue</span><span class="p">[</span><span class="n">CommandResponse</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pending</span><span class="p">:</span> <span class="n">OrderedDict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Future</span><span class="p">]</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_recv_task</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">asyncio</span><span class="o">.</span><span class="n">Task</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client_corr_id</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Sequential ID counter</span>
+
+        <span class="c1"># Lazy-loaded domain-specific client instances</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_users_client</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_groups_client</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_chats_client</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_files_client</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_database_client</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connections_client</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aenter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SimplexClient&quot;</span><span class="p">:</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aexit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Establish a connection to the chat server.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span> <span class="o">=</span> <span class="k">await</span> <span class="n">ChatTransport</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">,</span> <span class="n">qsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_qsize</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_event_q</span> <span class="o">=</span> <span class="n">ABQueue</span><span class="p">[</span><span class="n">CommandResponse</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">_qsize</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_recv_task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_recv_loop</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Connected to chat server&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># This is likely a connection error - provide helpful information</span>
+            <span class="k">if</span> <span class="s2">&quot;Connect call failed&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">SimplexConnectionError</span><span class="p">(</span><span class="s2">&quot;Connection refused&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="s2">&quot;Name or service not known&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">SimplexConnectionError</span><span class="p">(</span><span class="s2">&quot;Host not found&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">SimplexConnectionError</span><span class="p">(</span><span class="s2">&quot;Connection error&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># For other errors, still use our custom error but with the original exception</span>
+            <span class="k">raise</span> <span class="n">SimplexConnectionError</span><span class="p">(</span>
+                <span class="s2">&quot;Unexpected error while connecting&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="p">,</span> <span class="n">e</span>
+            <span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Disconnect from the chat server and clean up resources.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_recv_task</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_recv_task</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+            <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">):</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_recv_task</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_q</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_q</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pending</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Disconnected from chat server&quot;</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">send_command</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">cmd</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">SimplexCommand</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
+        <span class="n">expect_response</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CommandResponse</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Send a command to the chat server and optionally await a response.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cmd: The command object to send (SimplexCommand or compatible dict).</span>
+<span class="sd">            expect_response: If True, await and return the response matching the corr_id.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The response data, or None if not expecting a response.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            SimplexClientError: If not connected or timeout waiting for response.</span>
+<span class="sd">            SimplexCommandError: If the command results in an error response.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SimplexClientError</span><span class="p">(</span>
+                <span class="s2">&quot;Not connected to chat server. Use `async with SimplexClient(...)`&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Generate sequential numeric ID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client_corr_id</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">corr_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client_corr_id</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generated correlation ID: </span><span class="si">{</span><span class="n">corr_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Create a command string using the command&#39;s to_cmd_string method</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="s2">&quot;to_cmd_string&quot;</span><span class="p">):</span>
+            <span class="n">cmd_str</span> <span class="o">=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">to_cmd_string</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sending command: </span><span class="si">{</span><span class="n">cmd_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Create a ChatSrvRequest with the correlation ID and command string</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="n">ChatSrvRequest</span><span class="p">(</span><span class="n">corr_id</span><span class="o">=</span><span class="n">corr_id</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="n">cmd_str</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">expect_response</span><span class="p">:</span>
+            <span class="n">fut</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">()</span><span class="o">.</span><span class="n">create_future</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pending</span><span class="p">[</span><span class="n">corr_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">fut</span>
+
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">expect_response</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">raw_resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">wait_for</span><span class="p">(</span><span class="n">fut</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>
+
+                <span class="c1"># Handle error responses</span>
+                <span class="k">if</span> <span class="n">raw_resp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;chatCmdError&quot;</span><span class="p">:</span>
+                    <span class="n">error_info</span> <span class="o">=</span> <span class="n">raw_resp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;chatError&quot;</span><span class="p">,</span> <span class="p">{})</span>
+                    <span class="n">error_type</span> <span class="o">=</span> <span class="n">error_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;unknown&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: &quot;</span><span class="p">,</span> <span class="n">error_info</span><span class="p">)</span>
+
+                    <span class="c1"># Provide more specific error information for store errors</span>
+                    <span class="k">if</span> <span class="n">error_type</span> <span class="o">==</span> <span class="s2">&quot;errorStore&quot;</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span>
+                        <span class="n">error_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;storeError&quot;</span><span class="p">),</span> <span class="nb">dict</span>
+                    <span class="p">):</span>
+                        <span class="n">store_error</span> <span class="o">=</span> <span class="n">error_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;storeError&quot;</span><span class="p">,</span> <span class="p">{})</span>
+                        <span class="n">store_error_type</span> <span class="o">=</span> <span class="n">store_error</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span>
+
+                        <span class="c1"># Convert raw response to a StoreErrorType for enhanced detection</span>
+                        <span class="kn">from</span><span class="w"> </span><span class="nn">.responses.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">StoreErrorType</span>
+
+                        <span class="n">store_error_obj</span> <span class="o">=</span> <span class="n">StoreErrorType</span><span class="p">(</span>
+                            <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;errorStore&quot;</span><span class="p">,</span> <span class="n">storeError</span><span class="o">=</span><span class="n">store_error</span>
+                        <span class="p">)</span>
+
+                        <span class="c1"># For certain error types, return a response object instead of raising an exception</span>
+                        <span class="c1"># This allows domain-specific clients to handle these errors in a custom way</span>
+                        <span class="k">if</span> <span class="p">(</span>
+                            <span class="n">store_error_obj</span><span class="o">.</span><span class="n">is_contact_link_not_found_error</span><span class="p">()</span>
+                            <span class="ow">or</span> <span class="n">store_error_obj</span><span class="o">.</span><span class="n">is_duplicate_contact_link_error</span><span class="p">()</span>
+                        <span class="p">):</span>
+                            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                                <span class="sa">f</span><span class="s2">&quot;Returning store error as response: </span><span class="si">{</span><span class="n">store_error_type</span><span class="si">}</span><span class="s2">&quot;</span>
+                            <span class="p">)</span>
+                            <span class="k">return</span> <span class="n">store_error_obj</span>
+
+                        <span class="c1"># Check for specific store error types and provide helpful suggestions</span>
+                        <span class="k">if</span> <span class="n">store_error_obj</span><span class="o">.</span><span class="n">is_contact_link_not_found_error</span><span class="p">():</span>
+                            <span class="n">error_msg</span> <span class="o">=</span> <span class="s2">&quot;Command error: No chat address exists. Create one first with client.users.create_profile_address()&quot;</span>
+                        <span class="k">elif</span> <span class="n">store_error_obj</span><span class="o">.</span><span class="n">is_duplicate_contact_link_error</span><span class="p">():</span>
+                            <span class="n">error_msg</span> <span class="o">=</span> <span class="s2">&quot;Command error: Chat address already exists. Use client.users.show_profile_address() to view it&quot;</span>
+                        <span class="k">elif</span> <span class="n">store_error_type</span><span class="p">:</span>
+                            <span class="n">error_msg</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="sa">f</span><span class="s2">&quot;Command error: </span><span class="si">{</span><span class="n">error_type</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">store_error_type</span><span class="si">}</span><span class="s2">&quot;</span>
+                            <span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Command error: </span><span class="si">{</span><span class="n">error_type</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="k">elif</span> <span class="n">error_type</span> <span class="o">==</span> <span class="s2">&quot;error&quot;</span><span class="p">:</span>
+                        <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;ChatError: </span><span class="si">{</span><span class="n">error_info</span><span class="p">[</span><span class="s1">&#39;errorType&#39;</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Command error: </span><span class="si">{</span><span class="n">error_type</span><span class="si">}</span><span class="s2">&quot;</span>
+
+                    <span class="k">raise</span> <span class="n">SimplexCommandError</span><span class="p">(</span><span class="n">error_msg</span><span class="p">,</span> <span class="n">raw_resp</span><span class="p">)</span>
+
+                <span class="c1"># Use ResponseFactory to create the appropriate response object</span>
+                <span class="n">typed_resp</span> <span class="o">=</span> <span class="n">ResponseFactory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">raw_resp</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">typed_resp</span>
+            <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">:</span>
+                <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Timeout waiting for response to command: </span><span class="si">{</span><span class="n">cmd_str</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">raise</span> <span class="n">SimplexClientError</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pending</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">corr_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_recv_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Background task that processes incoming messages from the transport.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">for</span> <span class="n">resp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="p">:</span>
+                <span class="c1"># Extract the correlation ID and response data</span>
+                <span class="n">resp_corr_id</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="s2">&quot;corr_id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">resp_data</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="s2">&quot;resp&quot;</span><span class="p">,</span> <span class="n">resp</span><span class="p">)</span>
+
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received response with correlation ID: </span><span class="si">{</span><span class="n">resp_corr_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                <span class="c1"># If response has a correlation ID and matches a pending request</span>
+                <span class="k">if</span> <span class="n">resp_corr_id</span> <span class="ow">and</span> <span class="n">resp_corr_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pending</span><span class="p">:</span>
+                    <span class="n">fut</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pending</span><span class="p">[</span><span class="n">resp_corr_id</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">fut</span><span class="o">.</span><span class="n">done</span><span class="p">():</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Resolving future for correlation ID: </span><span class="si">{</span><span class="n">resp_corr_id</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="p">)</span>
+                        <span class="n">fut</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="n">resp_data</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># No matching future found, treat as an event</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;No matching future found, enqueuing as event&quot;</span><span class="p">)</span>
+                    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_q</span><span class="o">.</span><span class="n">enqueue</span><span class="p">(</span><span class="n">resp_data</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exception in recv_loop: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="n">CommandResponse</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Async generator yielding server events (responses not matched to a request).</span>
+
+<span class="sd">        Usage:</span>
+<span class="sd">            async for event in client.events():</span>
+<span class="sd">                # Process event</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_q</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SimplexClientError</span><span class="p">(</span><span class="s2">&quot;Not connected to chat server&quot;</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">evt</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_q</span><span class="o">.</span><span class="n">dequeue</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">evt</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="n">evt</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error in events generator: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">connected</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Whether the client is currently connected.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">users</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;UsersClient&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Access user-related operations with a fluent API.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_users_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">.clients.users</span><span class="w"> </span><span class="kn">import</span> <span class="n">UsersClient</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_users_client</span> <span class="o">=</span> <span class="n">UsersClient</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_users_client</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">groups</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;GroupsClient&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Access group-related operations with a fluent API.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_groups_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">.clients.groups</span><span class="w"> </span><span class="kn">import</span> <span class="n">GroupsClient</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_groups_client</span> <span class="o">=</span> <span class="n">GroupsClient</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_groups_client</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">chats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ChatsClient&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Access chat-related operations with a fluent API.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chats_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">.clients.chats</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatsClient</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_chats_client</span> <span class="o">=</span> <span class="n">ChatsClient</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chats_client</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;FilesClient&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Access file-related operations with a fluent API.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_files_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">.clients.files</span><span class="w"> </span><span class="kn">import</span> <span class="n">FilesClient</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_files_client</span> <span class="o">=</span> <span class="n">FilesClient</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_files_client</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">database</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DatabaseClient&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Access database-related operations with a fluent API.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_database_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">.clients.database</span><span class="w"> </span><span class="kn">import</span> <span class="n">DatabaseClient</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_database_client</span> <span class="o">=</span> <span class="n">DatabaseClient</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_database_client</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">connections</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ConnectionsClient&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Access connection-related operations with a fluent API.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connections_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">.clients.connections</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConnectionsClient</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_connections_client</span> <span class="o">=</span> <span class="n">ConnectionsClient</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connections_client</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="simplex_python.client.SimplexClient.chats" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">chats</span><span class="p">:</span> <span class="n">ChatsClient</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Access chat-related operations with a fluent API.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="simplex_python.client.SimplexClient.connected" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">connected</span><span class="p">:</span> <span class="nb">bool</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Whether the client is currently connected.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="simplex_python.client.SimplexClient.connections" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">connections</span><span class="p">:</span> <span class="n">ConnectionsClient</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Access connection-related operations with a fluent API.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="simplex_python.client.SimplexClient.database" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">database</span><span class="p">:</span> <span class="n">DatabaseClient</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Access database-related operations with a fluent API.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="simplex_python.client.SimplexClient.files" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">files</span><span class="p">:</span> <span class="n">FilesClient</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Access file-related operations with a fluent API.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="simplex_python.client.SimplexClient.groups" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">groups</span><span class="p">:</span> <span class="n">GroupsClient</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Access group-related operations with a fluent API.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="simplex_python.client.SimplexClient.users" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">users</span><span class="p">:</span> <span class="n">UsersClient</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Access user-related operations with a fluent API.</p>
+
+    </div>
+
+</div>
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="simplex_python.client.SimplexClient.__init__" class="doc doc-heading">
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">server</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ChatServer</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">qsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>server</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="simplex_python.transport.ChatServer">ChatServer</span>, <span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>ChatServer object or WebSocket URL to connect to.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>timeout</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Connection and command timeout in seconds.</p>
+              </div>
+            </td>
+            <td>
+                  <code>10.0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>qsize</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Max size of the event queue.</p>
+              </div>
+            </td>
+            <td>
+                  <code>100</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>simplex_python/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ChatServer</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">qsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Args:</span>
+<span class="sd">        server: ChatServer object or WebSocket URL to connect to.</span>
+<span class="sd">        timeout: Connection and command timeout in seconds.</span>
+<span class="sd">        qsize: Max size of the event queue.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_server</span> <span class="o">=</span> <span class="n">server</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_qsize</span> <span class="o">=</span> <span class="n">qsize</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ChatTransport</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_event_q</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ABQueue</span><span class="p">[</span><span class="n">CommandResponse</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_pending</span><span class="p">:</span> <span class="n">OrderedDict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Future</span><span class="p">]</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_recv_task</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">asyncio</span><span class="o">.</span><span class="n">Task</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_client_corr_id</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Sequential ID counter</span>
+
+    <span class="c1"># Lazy-loaded domain-specific client instances</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_users_client</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_groups_client</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_chats_client</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_files_client</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_database_client</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_connections_client</span> <span class="o">=</span> <span class="kc">None</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="simplex_python.client.SimplexClient.connect" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">connect</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Establish a connection to the chat server.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>simplex_python/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Establish a connection to the chat server.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span> <span class="o">=</span> <span class="k">await</span> <span class="n">ChatTransport</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">,</span> <span class="n">qsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_qsize</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_event_q</span> <span class="o">=</span> <span class="n">ABQueue</span><span class="p">[</span><span class="n">CommandResponse</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">_qsize</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_recv_task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_recv_loop</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Connected to chat server&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># This is likely a connection error - provide helpful information</span>
+        <span class="k">if</span> <span class="s2">&quot;Connect call failed&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">SimplexConnectionError</span><span class="p">(</span><span class="s2">&quot;Connection refused&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;Name or service not known&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">SimplexConnectionError</span><span class="p">(</span><span class="s2">&quot;Host not found&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SimplexConnectionError</span><span class="p">(</span><span class="s2">&quot;Connection error&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># For other errors, still use our custom error but with the original exception</span>
+        <span class="k">raise</span> <span class="n">SimplexConnectionError</span><span class="p">(</span>
+            <span class="s2">&quot;Unexpected error while connecting&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="p">,</span> <span class="n">e</span>
+        <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="simplex_python.client.SimplexClient.disconnect" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">disconnect</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Disconnect from the chat server and clean up resources.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>simplex_python/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Disconnect from the chat server and clean up resources.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_recv_task</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_recv_task</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">):</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_recv_task</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="p">:</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_q</span><span class="p">:</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_q</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_pending</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Disconnected from chat server&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="simplex_python.client.SimplexClient.events" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">events</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="n">CommandResponse</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Async generator yielding server events (responses not matched to a request).</p>
+
+
+<details class="usage" open>
+  <summary>Usage</summary>
+  <p>async for event in client.events():
+    # Process event</p>
+</details>
+
+            <details class="quote">
+              <summary>Source code in <code>simplex_python/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="n">CommandResponse</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Async generator yielding server events (responses not matched to a request).</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">        async for event in client.events():</span>
+<span class="sd">            # Process event</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_q</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SimplexClientError</span><span class="p">(</span><span class="s2">&quot;Not connected to chat server&quot;</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">evt</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_q</span><span class="o">.</span><span class="n">dequeue</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">evt</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">evt</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error in events generator: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
+                <span class="k">break</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="simplex_python.client.SimplexClient.send_command" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">send_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">SimplexCommand</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">expect_response</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CommandResponse</span><span class="p">]</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Send a command to the chat server and optionally await a response.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>cmd</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="simplex_python.commands.SimplexCommand">SimplexCommand</span>, <span title="typing.Dict">Dict</span>[<span title="str">str</span>, <span title="typing.Any">Any</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The command object to send (SimplexCommand or compatible dict).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>expect_response</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If True, await and return the response matching the corr_id.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="simplex_python.responses.CommandResponse">CommandResponse</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The response data, or None if not expecting a response.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="SimplexClientError (simplex_python.client_errors.SimplexClientError)" href="#simplex_python.client_errors.SimplexClientError">SimplexClientError</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If not connected or timeout waiting for response.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="SimplexCommandError (simplex_python.client_errors.SimplexCommandError)" href="#simplex_python.client_errors.SimplexCommandError">SimplexCommandError</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If the command results in an error response.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>simplex_python/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">send_command</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">cmd</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">SimplexCommand</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
+    <span class="n">expect_response</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CommandResponse</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Send a command to the chat server and optionally await a response.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cmd: The command object to send (SimplexCommand or compatible dict).</span>
+<span class="sd">        expect_response: If True, await and return the response matching the corr_id.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The response data, or None if not expecting a response.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        SimplexClientError: If not connected or timeout waiting for response.</span>
+<span class="sd">        SimplexCommandError: If the command results in an error response.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SimplexClientError</span><span class="p">(</span>
+            <span class="s2">&quot;Not connected to chat server. Use `async with SimplexClient(...)`&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Generate sequential numeric ID</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_client_corr_id</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">corr_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client_corr_id</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generated correlation ID: </span><span class="si">{</span><span class="n">corr_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create a command string using the command&#39;s to_cmd_string method</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="s2">&quot;to_cmd_string&quot;</span><span class="p">):</span>
+        <span class="n">cmd_str</span> <span class="o">=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">to_cmd_string</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cmd_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sending command: </span><span class="si">{</span><span class="n">cmd_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create a ChatSrvRequest with the correlation ID and command string</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="n">ChatSrvRequest</span><span class="p">(</span><span class="n">corr_id</span><span class="o">=</span><span class="n">corr_id</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="n">cmd_str</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">expect_response</span><span class="p">:</span>
+        <span class="n">fut</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">()</span><span class="o">.</span><span class="n">create_future</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pending</span><span class="p">[</span><span class="n">corr_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">fut</span>
+
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">expect_response</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">raw_resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">wait_for</span><span class="p">(</span><span class="n">fut</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>
+
+            <span class="c1"># Handle error responses</span>
+            <span class="k">if</span> <span class="n">raw_resp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;chatCmdError&quot;</span><span class="p">:</span>
+                <span class="n">error_info</span> <span class="o">=</span> <span class="n">raw_resp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;chatError&quot;</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="n">error_type</span> <span class="o">=</span> <span class="n">error_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;unknown&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: &quot;</span><span class="p">,</span> <span class="n">error_info</span><span class="p">)</span>
+
+                <span class="c1"># Provide more specific error information for store errors</span>
+                <span class="k">if</span> <span class="n">error_type</span> <span class="o">==</span> <span class="s2">&quot;errorStore&quot;</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span>
+                    <span class="n">error_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;storeError&quot;</span><span class="p">),</span> <span class="nb">dict</span>
+                <span class="p">):</span>
+                    <span class="n">store_error</span> <span class="o">=</span> <span class="n">error_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;storeError&quot;</span><span class="p">,</span> <span class="p">{})</span>
+                    <span class="n">store_error_type</span> <span class="o">=</span> <span class="n">store_error</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span>
+
+                    <span class="c1"># Convert raw response to a StoreErrorType for enhanced detection</span>
+                    <span class="kn">from</span><span class="w"> </span><span class="nn">.responses.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">StoreErrorType</span>
+
+                    <span class="n">store_error_obj</span> <span class="o">=</span> <span class="n">StoreErrorType</span><span class="p">(</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;errorStore&quot;</span><span class="p">,</span> <span class="n">storeError</span><span class="o">=</span><span class="n">store_error</span>
+                    <span class="p">)</span>
+
+                    <span class="c1"># For certain error types, return a response object instead of raising an exception</span>
+                    <span class="c1"># This allows domain-specific clients to handle these errors in a custom way</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">store_error_obj</span><span class="o">.</span><span class="n">is_contact_link_not_found_error</span><span class="p">()</span>
+                        <span class="ow">or</span> <span class="n">store_error_obj</span><span class="o">.</span><span class="n">is_duplicate_contact_link_error</span><span class="p">()</span>
+                    <span class="p">):</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Returning store error as response: </span><span class="si">{</span><span class="n">store_error_type</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="p">)</span>
+                        <span class="k">return</span> <span class="n">store_error_obj</span>
+
+                    <span class="c1"># Check for specific store error types and provide helpful suggestions</span>
+                    <span class="k">if</span> <span class="n">store_error_obj</span><span class="o">.</span><span class="n">is_contact_link_not_found_error</span><span class="p">():</span>
+                        <span class="n">error_msg</span> <span class="o">=</span> <span class="s2">&quot;Command error: No chat address exists. Create one first with client.users.create_profile_address()&quot;</span>
+                    <span class="k">elif</span> <span class="n">store_error_obj</span><span class="o">.</span><span class="n">is_duplicate_contact_link_error</span><span class="p">():</span>
+                        <span class="n">error_msg</span> <span class="o">=</span> <span class="s2">&quot;Command error: Chat address already exists. Use client.users.show_profile_address() to view it&quot;</span>
+                    <span class="k">elif</span> <span class="n">store_error_type</span><span class="p">:</span>
+                        <span class="n">error_msg</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Command error: </span><span class="si">{</span><span class="n">error_type</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">store_error_type</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Command error: </span><span class="si">{</span><span class="n">error_type</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">elif</span> <span class="n">error_type</span> <span class="o">==</span> <span class="s2">&quot;error&quot;</span><span class="p">:</span>
+                    <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;ChatError: </span><span class="si">{</span><span class="n">error_info</span><span class="p">[</span><span class="s1">&#39;errorType&#39;</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Command error: </span><span class="si">{</span><span class="n">error_type</span><span class="si">}</span><span class="s2">&quot;</span>
+
+                <span class="k">raise</span> <span class="n">SimplexCommandError</span><span class="p">(</span><span class="n">error_msg</span><span class="p">,</span> <span class="n">raw_resp</span><span class="p">)</span>
+
+            <span class="c1"># Use ResponseFactory to create the appropriate response object</span>
+            <span class="n">typed_resp</span> <span class="o">=</span> <span class="n">ResponseFactory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">raw_resp</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">typed_resp</span>
+        <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">:</span>
+            <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Timeout waiting for response to command: </span><span class="si">{</span><span class="n">cmd_str</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">raise</span> <span class="n">SimplexClientError</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pending</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">corr_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div><h2 id="chattransport">ChatTransport</h2>
+<p>The transport layer handles the low-level connection details for communication with the SimpleX server.</p>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="simplex_python.transport.ChatTransport" class="doc doc-heading">
+            <code>simplex_python.transport.ChatTransport</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="simplex_python.transport.Transport">Transport</span>[<span title="simplex_python.transport.ChatSrvRequest">ChatSrvRequest</span>, <span title="simplex_python.transport.ChatSrvResponse">ChatSrvResponse</span>]</code></p>
+
+
+        <p>High-level transport abstraction for Simplex chat protocol.</p>
+<p>Wraps a WSTransport and provides protocol-aware send/receive methods.
+Uses ChatCommand and CommandResponse for type safety.</p>
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>simplex_python/transport.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ChatTransport</span><span class="p">(</span><span class="n">Transport</span><span class="p">[</span><span class="n">ChatSrvRequest</span><span class="p">,</span> <span class="n">ChatSrvResponse</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;High-level transport abstraction for Simplex chat protocol.</span>
+
+<span class="sd">    Wraps a WSTransport and provides protocol-aware send/receive methods.</span>
+<span class="sd">    Uses ChatCommand and CommandResponse for type safety.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ws_transport</span><span class="p">:</span> <span class="n">WSTransport</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">qsize</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">qsize</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ws</span> <span class="o">=</span> <span class="n">ws_transport</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">connect</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="n">ChatServer</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">qsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ChatTransport&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Establish a connection to the given ChatServer or URL.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">server</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;ws://</span><span class="si">{</span><span class="n">server</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">server</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">if</span> <span class="n">server</span><span class="o">.</span><span class="n">port</span>
+                <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;ws://</span><span class="si">{</span><span class="n">server</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="n">ws</span> <span class="o">=</span> <span class="k">await</span> <span class="n">WSTransport</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span> <span class="n">qsize</span><span class="o">=</span><span class="n">qsize</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">qsize</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ws</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">ChatSrvRequest</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Serialize and send the command envelope.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            req: A ChatSrvRequest with corrId and cmd</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Convert to JSON and send</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;corrId&quot;</span><span class="p">:</span> <span class="n">req</span><span class="o">.</span><span class="n">corr_id</span><span class="p">,</span> <span class="s2">&quot;cmd&quot;</span><span class="p">:</span> <span class="n">req</span><span class="o">.</span><span class="n">cmd</span><span class="p">})</span>
+        <span class="c1"># print(f&quot;[DEBUG] Sending command envelope: {data}&quot;)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ws</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChatSrvResponse</span><span class="p">:</span>
+        <span class="c1"># Deserialize response as needed</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ws</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="c1"># print(f&quot;[DEBUG] Received raw message: {msg}&quot;)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># Create the response object with proper typing</span>
+        <span class="n">corr_id</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;corrId&quot;</span><span class="p">)</span>
+        <span class="n">resp_data</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;resp&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Create a proper ChatSrvResponse object</span>
+        <span class="k">return</span> <span class="n">ChatSrvResponse</span><span class="p">(</span><span class="n">corr_id</span><span class="o">=</span><span class="n">corr_id</span><span class="p">,</span> <span class="n">resp</span><span class="o">=</span><span class="n">resp_data</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__anext__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="simplex_python.transport.ChatTransport.connect" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">connect</span><span class="p">(</span><span class="n">server</span><span class="p">:</span> <span class="n">ChatServer</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">qsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;ChatTransport&#39;</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Establish a connection to the given ChatServer or URL.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>simplex_python/transport.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">connect</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="n">ChatServer</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">qsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ChatTransport&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Establish a connection to the given ChatServer or URL.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">server</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;ws://</span><span class="si">{</span><span class="n">server</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">server</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="n">server</span><span class="o">.</span><span class="n">port</span>
+            <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;ws://</span><span class="si">{</span><span class="n">server</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="n">ws</span> <span class="o">=</span> <span class="k">await</span> <span class="n">WSTransport</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span> <span class="n">qsize</span><span class="o">=</span><span class="n">qsize</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">qsize</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="simplex_python.transport.ChatTransport.write" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">write</span><span class="p">(</span><span class="n">req</span><span class="p">:</span> <span class="n">ChatSrvRequest</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Serialize and send the command envelope.
+Args:
+    req: A ChatSrvRequest with corrId and cmd</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>simplex_python/transport.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">ChatSrvRequest</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Serialize and send the command envelope.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        req: A ChatSrvRequest with corrId and cmd</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert to JSON and send</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;corrId&quot;</span><span class="p">:</span> <span class="n">req</span><span class="o">.</span><span class="n">corr_id</span><span class="p">,</span> <span class="s2">&quot;cmd&quot;</span><span class="p">:</span> <span class="n">req</span><span class="o">.</span><span class="n">cmd</span><span class="p">})</span>
+    <span class="c1"># print(f&quot;[DEBUG] Sending command envelope: {data}&quot;)</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ws</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div><h2 id="error-types">Error Types</h2>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="simplex_python.client_errors" class="doc doc-heading">
+            <code>simplex_python.client_errors</code>
+
+
+</h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Error handling for the Simplex chat client.</p>
+<p>This module provides structured error handling for the Simplex chat client,
+allowing for more specific error details and response context when operations fail.</p>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="simplex_python.client_errors.SimplexClientError" class="doc doc-heading">
+            <code>SimplexClientError</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="Exception">Exception</span></code></p>
+
+
+        <p>Exception raised for client-level errors in SimplexClient.</p>
+<p>Used for connection, transport, and general client operation errors.</p>
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>simplex_python/client_errors.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SimplexClientError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Exception raised for client-level errors in SimplexClient.</span>
+
+<span class="sd">    Used for connection, transport, and general client operation errors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">pass</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="simplex_python.client_errors.SimplexCommandError" class="doc doc-heading">
+            <code>SimplexCommandError</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="Exception">Exception</span></code></p>
+
+
+        <p>Exception raised for errors in SimplexClient command execution.</p>
+<p>Provides details about the specific error and includes the original response
+for further inspection when available.</p>
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>simplex_python/client_errors.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SimplexCommandError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Exception raised for errors in SimplexClient command execution.</span>
+
+<span class="sd">    Provides details about the specific error and includes the original response</span>
+<span class="sd">    for further inspection when available.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CommandResponse</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize a new SimplexCommandError.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            message: Human-readable error description</span>
+<span class="sd">            response: Optional original response object that triggered the error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">response</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="simplex_python.client_errors.SimplexCommandError.__init__" class="doc doc-heading">
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CommandResponse</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Initialize a new SimplexCommandError.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>message</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Human-readable error description</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>response</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="simplex_python.responses.CommandResponse">CommandResponse</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Optional original response object that triggered the error</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>simplex_python/client_errors.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CommandResponse</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initialize a new SimplexCommandError.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        message: Human-readable error description</span>
+<span class="sd">        response: Optional original response object that triggered the error</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">response</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="simplex_python.client_errors.SimplexConnectionError" class="doc doc-heading">
+            <code>SimplexConnectionError</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="SimplexClientError (simplex_python.client_errors.SimplexClientError)" href="#simplex_python.client_errors.SimplexClientError">SimplexClientError</a></code></p>
+
+
+        <p>Exception raised for connection errors in SimplexClient.</p>
+<p>Provides detailed information about connection issues, including
+suggestions for common problems like server not running.</p>
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>simplex_python/client_errors.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SimplexConnectionError</span><span class="p">(</span><span class="n">SimplexClientError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Exception raised for connection errors in SimplexClient.</span>
+
+<span class="sd">    Provides detailed information about connection issues, including</span>
+<span class="sd">    suggestions for common problems like server not running.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">original_error</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize a new SimplexConnectionError.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            message: Human-readable error description</span>
+<span class="sd">            url: The URL that failed to connect</span>
+<span class="sd">            original_error: The original exception that caused the connection failure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">original_error</span> <span class="o">=</span> <span class="n">original_error</span>
+
+        <span class="c1"># Build a detailed error message with helpful suggestions</span>
+        <span class="n">detailed_message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Failed to connect to SimpleX server at </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="c1"># Add common troubleshooting tips</span>
+        <span class="n">detailed_message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Possible causes:&quot;</span>
+        <span class="n">detailed_message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">- SimpleX Chat server is not running at the specified address and port&quot;</span>
+        <span class="n">detailed_message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">- Network connectivity issues&quot;</span>
+        <span class="n">detailed_message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">- Incorrect host or port in the URL&quot;</span>
+
+        <span class="n">detailed_message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Troubleshooting steps:&quot;</span>
+        <span class="n">detailed_message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">1. Verify the SimpleX Chat server is running&quot;</span>
+        <span class="n">detailed_message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">2. Check the host and port in your connection URL&quot;</span>
+        <span class="n">detailed_message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">3. Ensure there are no firewall or network restrictions&quot;</span>
+
+        <span class="k">if</span> <span class="n">original_error</span><span class="p">:</span>
+            <span class="n">detailed_message</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Original error: </span><span class="si">{</span><span class="n">original_error</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">detailed_message</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="simplex_python.client_errors.SimplexConnectionError.__init__" class="doc doc-heading">
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">original_error</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Initialize a new SimplexConnectionError.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>message</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Human-readable error description</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>url</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The URL that failed to connect</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>original_error</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="Exception">Exception</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The original exception that caused the connection failure</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>simplex_python/client_errors.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">original_error</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initialize a new SimplexConnectionError.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        message: Human-readable error description</span>
+<span class="sd">        url: The URL that failed to connect</span>
+<span class="sd">        original_error: The original exception that caused the connection failure</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">original_error</span> <span class="o">=</span> <span class="n">original_error</span>
+
+    <span class="c1"># Build a detailed error message with helpful suggestions</span>
+    <span class="n">detailed_message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Failed to connect to SimpleX server at </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="c1"># Add common troubleshooting tips</span>
+    <span class="n">detailed_message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Possible causes:&quot;</span>
+    <span class="n">detailed_message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">- SimpleX Chat server is not running at the specified address and port&quot;</span>
+    <span class="n">detailed_message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">- Network connectivity issues&quot;</span>
+    <span class="n">detailed_message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">- Incorrect host or port in the URL&quot;</span>
+
+    <span class="n">detailed_message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Troubleshooting steps:&quot;</span>
+    <span class="n">detailed_message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">1. Verify the SimpleX Chat server is running&quot;</span>
+    <span class="n">detailed_message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">2. Check the host and port in your connection URL&quot;</span>
+    <span class="n">detailed_message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">3. Ensure there are no firewall or network restrictions&quot;</span>
+
+    <span class="k">if</span> <span class="n">original_error</span><span class="p">:</span>
+        <span class="n">detailed_message</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Original error: </span><span class="si">{</span><span class="n">original_error</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">detailed_message</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+    
+  </body>
+</html>
