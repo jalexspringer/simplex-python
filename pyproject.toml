@@ -8,6 +8,13 @@ dependencies = [
     "websockets>=15.0.1",
 ]
 
+[build-system]
+requires = ["hatchling>=1.18.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["simplex_python"]
+
 [dependency-groups]
 dev = [
     "mkdocs>=1.6.1",
