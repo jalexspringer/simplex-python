@@ -38,8 +38,10 @@ def cmd_string(cmd: BaseCommand) -> str:
         case "showActiveUser":
             return "/u"
         case "createActiveUser":
+            # Use to_dict method for profile if available
+            profile = cmd.profile.to_dict() if hasattr(cmd.profile, 'to_dict') else cmd.profile
             user = {
-                "profile": cmd.profile,
+                "profile": profile,
                 "sameServers": cmd.sameServers,
                 "pastTimestamp": cmd.pastTimestamp,
             }

@@ -12,7 +12,7 @@ for user-related operations in the Simplex system.
 """
 
 from dataclasses import dataclass
-from typing import Optional, Union
+from typing import Optional, Union, Dict, Any
 from .base import BaseCommand, MsgContent
 
 
@@ -198,6 +198,15 @@ class Profile:
     fullName: str
     image: Optional[str] = None
     contactLink: Optional[str] = None
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert profile to a dictionary for serialization."""
+        return {
+            "displayName": self.displayName,
+            "fullName": self.fullName,
+            **({"image": self.image} if self.image is not None else {}),
+            **({"contactLink": self.contactLink} if self.contactLink is not None else {})
+        }
 
 
 @dataclass

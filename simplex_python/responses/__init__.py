@@ -28,6 +28,7 @@ from .users import (
     UserContactLinkUpdatedResponse,
     UserContactLinkSubscribedResponse,
     UserContactLinkSubErrorResponse,
+    UserItem,
 )
 
 from .groups import (
@@ -148,6 +149,7 @@ UserResponse = (
     | UserContactLinkUpdatedResponse
     | UserContactLinkSubscribedResponse
     | UserContactLinkSubErrorResponse
+    | UserItem
     | None
 )
 
@@ -260,7 +262,7 @@ def _register_response_types():
     """Register all response types with the ResponseFactory."""
     # User responses
     ResponseFactory.register_response_type("activeUser", ActiveUserResponse)
-    ResponseFactory.register_response_type("users", UsersListResponse)
+    ResponseFactory.register_response_type("usersList", UsersListResponse)
     ResponseFactory.register_response_type("userProfile", UserProfileResponse)
     ResponseFactory.register_response_type(
         "userProfileUpdated", UserProfileUpdatedResponse
@@ -282,6 +284,7 @@ def _register_response_types():
         "subscribed", UserContactLinkSubscribedResponse
     )
     ResponseFactory.register_response_type("subError", UserContactLinkSubErrorResponse)
+    ResponseFactory.register_response_type("userItem", UserItem)
 
     # Group responses
     ResponseFactory.register_response_type("groupCreated", GroupCreatedResponse)
@@ -461,6 +464,7 @@ ResponseType = (
     | UserContactLinkUpdatedResponse
     | UserContactLinkSubscribedResponse
     | UserContactLinkSubErrorResponse
+    | UserItem
     |
     # Group responses
     GroupCreatedResponse
@@ -576,6 +580,7 @@ __all__ = [
     "UserContactLinkUpdatedResponse",
     "UserContactLinkSubscribedResponse",
     "UserContactLinkSubErrorResponse",
+    "UserItem",
     # Group responses
     "GroupCreatedResponse",
     "GroupMembersResponse",
