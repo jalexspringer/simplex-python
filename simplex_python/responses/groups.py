@@ -145,128 +145,6 @@ class GroupUpdatedResponse(CommandResponse):
 
 
 @dataclass
-class GroupLinkCreatedResponse(CommandResponse):
-    """Response when a group link is created."""
-
-    groupInfo: Dict[str, Any] = field(default_factory=dict)
-    link: str = ""
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "GroupLinkCreatedResponse":
-        return cls(
-            type="groupLinkCreated",
-            user=data.get("user"),
-            groupInfo=data.get("groupInfo", {}),
-            link=data.get("link", ""),
-        )
-
-
-@dataclass
-class GroupLinkUpdatedResponse(CommandResponse):
-    """Response when a group link member role is updated."""
-
-    groupInfo: Dict[str, Any] = field(default_factory=dict)
-    link: str = ""
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "GroupLinkUpdatedResponse":
-        return cls(
-            type="groupLinkUpdated",
-            user=data.get("user"),
-            groupInfo=data.get("groupInfo", {}),
-            link=data.get("link", ""),
-        )
-
-
-@dataclass
-class GroupLinkDeletedResponse(CommandResponse):
-    """Response when a group link is deleted."""
-
-    groupInfo: Dict[str, Any] = field(default_factory=dict)
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "GroupLinkDeletedResponse":
-        return cls(
-            type="groupLinkDeleted",
-            user=data.get("user"),
-            groupInfo=data.get("groupInfo", {}),
-        )
-
-
-@dataclass
-class GroupLinkResponse(CommandResponse):
-    """Response containing a group link."""
-
-    groupInfo: Dict[str, Any] = field(default_factory=dict)
-    link: str = ""
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "GroupLinkResponse":
-        return cls(
-            type="groupLink",
-            user=data.get("user"),
-            groupInfo=data.get("groupInfo", {}),
-            link=data.get("link", ""),
-        )
-
-
-@dataclass
-class GroupMemberInfoResponse(CommandResponse):
-    """Response containing info about a group member."""
-
-    groupInfo: Dict[str, Any] = field(default_factory=dict)
-    member: Dict[str, Any] = field(default_factory=dict)
-    connectionStats_: Optional[Dict[str, Any]] = None
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "GroupMemberInfoResponse":
-        return cls(
-            type="groupMemberInfo",
-            user=data.get("user"),
-            groupInfo=data.get("groupInfo", {}),
-            member=data.get("member", {}),
-            connectionStats_=data.get("connectionStats_"),
-        )
-
-
-@dataclass
-class ConnectionCodeResponse(CommandResponse):
-    """Response containing a connection/verification code."""
-
-    connReqContact: str = ""
-    connectionCode: str = ""
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "ConnectionCodeResponse":
-        # This response type could be for either member or contact verification
-        return cls(
-            type="connectionCode",
-            user=data.get("user"),
-            connReqContact=data.get("connReqContact", ""),
-            connectionCode=data.get("connectionCode", ""),
-        )
-
-
-@dataclass
-class MemberVerifiedResponse(CommandResponse):
-    """Response when a member verification is successful."""
-
-    groupInfo: Dict[str, Any] = field(default_factory=dict)
-    member: Dict[str, Any] = field(default_factory=dict)
-    verified: bool = False
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "MemberVerifiedResponse":
-        return cls(
-            type="memberVerified",
-            user=data.get("user"),
-            groupInfo=data.get("groupInfo", {}),
-            member=data.get("member", {}),
-            verified=data.get("verified", False),
-        )
-
-
-@dataclass
 class GroupInvitationResponse(CommandResponse):
     """Response containing a group invitation."""
 
@@ -335,6 +213,42 @@ class JoinedGroupMemberResponse(CommandResponse):
 
 
 @dataclass
+class JoinedGroupMemberConnectingResponse(CommandResponse):
+    """Response when a joined group member is connecting."""
+
+    groupInfo: Dict[str, Any] = field(default_factory=dict)
+    hostMember: Dict[str, Any] = field(default_factory=dict)
+    member: Dict[str, Any] = field(default_factory=dict)
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "JoinedGroupMemberConnectingResponse":
+        return cls(
+            type="joinedGroupMemberConnecting",
+            user=data.get("user"),
+            groupInfo=data.get("groupInfo", {}),
+            hostMember=data.get("hostMember", {}),
+            member=data.get("member", {}),
+        )
+
+
+@dataclass
+class ConnectedToGroupMemberResponse(CommandResponse):
+    """Response when connected to a group member."""
+
+    groupInfo: Dict[str, Any] = field(default_factory=dict)
+    member: Dict[str, Any] = field(default_factory=dict)
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "ConnectedToGroupMemberResponse":
+        return cls(
+            type="connectedToGroupMember",
+            user=data.get("user"),
+            groupInfo=data.get("groupInfo", {}),
+            member=data.get("member", {}),
+        )
+
+
+@dataclass
 class DeletedMemberResponse(CommandResponse):
     """Response when a member is deleted from a group."""
 
@@ -350,6 +264,23 @@ class DeletedMemberResponse(CommandResponse):
             groupInfo=data.get("groupInfo", {}),
             byMember=data.get("byMember", {}),
             deletedMember=data.get("deletedMember", {}),
+        )
+
+
+@dataclass
+class DeletedMemberUserResponse(CommandResponse):
+    """Response when a member is deleted for a user."""
+
+    groupInfo: Dict[str, Any] = field(default_factory=dict)
+    member: Dict[str, Any] = field(default_factory=dict)
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "DeletedMemberUserResponse":
+        return cls(
+            type="deletedMemberUser",
+            user=data.get("user"),
+            groupInfo=data.get("groupInfo", {}),
+            member=data.get("member", {}),
         )
 
 
@@ -371,6 +302,38 @@ class LeftMemberResponse(CommandResponse):
 
 
 @dataclass
+class GroupRemovedResponse(CommandResponse):
+    """Response when a group is removed."""
+
+    groupInfo: Dict[str, Any] = field(default_factory=dict)
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "GroupRemovedResponse":
+        return cls(
+            type="groupRemoved",
+            user=data.get("user"),
+            groupInfo=data.get("groupInfo", {}),
+        )
+
+
+@dataclass
+class GroupDeletedResponse(CommandResponse):
+    """Response when a group is deleted."""
+
+    groupInfo: Dict[str, Any] = field(default_factory=dict)
+    member: Dict[str, Any] = field(default_factory=dict)
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "GroupDeletedResponse":
+        return cls(
+            type="groupDeleted",
+            user=data.get("user"),
+            groupInfo=data.get("groupInfo", {}),
+            member=data.get("member", {}),
+        )
+
+
+@dataclass
 class GroupSubscribedResponse(CommandResponse):
     """Response when a group is subscribed to."""
 
@@ -385,9 +348,56 @@ class GroupSubscribedResponse(CommandResponse):
         )
 
 
+@dataclass
+class GroupEmptyResponse(CommandResponse):
+    """Response when a group is empty."""
+
+    groupInfo: Dict[str, Any] = field(default_factory=dict)
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "GroupEmptyResponse":
+        return cls(
+            type="groupEmpty",
+            user=data.get("user"),
+            groupInfo=data.get("groupInfo", {}),
+        )
+
+
+@dataclass
+class MemberSubErrorResponse(CommandResponse):
+    """Response when there's an error with a member subscription."""
+
+    groupInfo: Dict[str, Any] = field(default_factory=dict)
+    member: Dict[str, Any] = field(default_factory=dict)
+    chatError: Dict[str, Any] = field(default_factory=dict)
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "MemberSubErrorResponse":
+        return cls(
+            type="memberSubError",
+            user=data.get("user"),
+            groupInfo=data.get("groupInfo", {}),
+            member=data.get("member", {}),
+            chatError=data.get("chatError", {}),
+        )
+
+
+@dataclass
+class MemberSubSummaryResponse(CommandResponse):
+    """Response containing a summary of member subscriptions."""
+
+    memberSubscriptions: List[Dict[str, Any]] = field(default_factory=list)
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "MemberSubSummaryResponse":
+        return cls(
+            type="memberSubSummary",
+            user=data.get("user"),
+            memberSubscriptions=data.get("memberSubscriptions", []),
+        )
+
+
 # Supporting data classes that mirror those in the group.py commands file
-
-
 @dataclass
 class GroupProfile:
     """Group profile information."""

@@ -12,8 +12,19 @@ for group-related operations in the Simplex system.
 """
 
 from dataclasses import dataclass
-from typing import Optional, Union
+from typing import Union, Optional
 from .base import BaseCommand, GroupMemberRole
+
+# Supporting data classes for group-related commands
+
+
+@dataclass
+class GroupProfile:
+    """Group profile information."""
+
+    displayName: str
+    fullName: str  # can be empty string
+    image: Optional[str] = None
 
 
 @dataclass(kw_only=True)
@@ -21,7 +32,7 @@ class NewGroup(BaseCommand):
     """Command to create a new group."""
 
     type: str = "newGroup"
-    groupProfile: "GroupProfile"
+    groupProfile: GroupProfile
 
 
 @dataclass(kw_only=True)
@@ -73,7 +84,7 @@ class APIUpdateGroupProfile(BaseCommand):
 
     type: str = "apiUpdateGroupProfile"
     groupId: int
-    groupProfile: "GroupProfile"
+    groupProfile: GroupProfile
 
 
 @dataclass(kw_only=True)
@@ -136,18 +147,6 @@ class APIVerifyGroupMember(BaseCommand):
     groupId: int
     groupMemberId: int
     connectionCode: str
-
-
-# Supporting data classes for group-related commands
-
-
-@dataclass
-class GroupProfile:
-    """Group profile information."""
-
-    displayName: str
-    fullName: str  # can be empty string
-    image: Optional[str] = None
 
 
 # Type alias for GroupCommand

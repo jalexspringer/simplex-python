@@ -6,7 +6,7 @@ Command formatting utilities for Simplex protocol.
 import json
 from typing import Any, Dict, Optional
 
-from .base import BaseCommand
+from .base import BaseCommand, ServerProtocol
 
 
 def cmd_string(cmd: BaseCommand) -> str:
@@ -79,7 +79,7 @@ def cmd_string(cmd: BaseCommand) -> str:
         case "apiDeleteStorage":
             return "/_db delete"
         case "apiGetChats":
-            return f"/_get chats pcc={on_off(cmd.pendingConnections)}"
+            return "/chats"
         case "apiGetChat":
             pagination = pagination_str(cmd.pagination)
             return f"/_get chat {cmd.chatType}{cmd.chatId}{pagination}"
@@ -113,7 +113,7 @@ def cmd_string(cmd: BaseCommand) -> str:
         case "apiSetContactAlias":
             return f"/_set alias @{cmd.contactId} {cmd.localAlias.strip()}"
         case "newGroup":
-            return f"/_group {json.dumps(cmd.groupProfile)}"
+            return f"/group {cmd.groupProfile['displayName']} {cmd.groupProfile['fullName']} {cmd.groupProfile['image']}"
         case "apiAddMember":
             return f"/_add #{cmd.groupId} {cmd.contactId} {cmd.memberRole}"
         case "apiJoinGroup":
@@ -135,7 +135,10 @@ def cmd_string(cmd: BaseCommand) -> str:
         case "apiGetGroupLink":
             return f"/_get link #{cmd.groupId}"
         case "apiGetUserProtoServers":
-            return f"/_servers {cmd.userId} {cmd.serverProtocol}"
+            if cmd.serverProtocol == ServerProtocol.SMP:
+                return "/smp"
+            if cmd.serverProtocol == ServerProtocol.XFTP:
+                return "/xftp"
         case "apiSetUserProtoServers":
             return f"/_servers {cmd.userId} {cmd.serverProtocol} {json.dumps({'servers': cmd.servers})}"
         case "apiContactInfo":

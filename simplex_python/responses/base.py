@@ -213,21 +213,80 @@ class StoreErrorType(CommandError):
         return cls(type="errorStore", storeError=data.get("storeError", {}))
 
 
-# Common utility to create appropriate response instances based on type
-def create_response_from_dict(data: Dict[str, Any]) -> CommandResponse:
+@dataclass
+class CmdOkResponse(CommandResponse):
+    """Response when a command succeeds with no specific return data."""
+
+    user_: Optional[Dict[str, Any]] = None
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "CmdOkResponse":
+        return cls(type="cmdOk", user_=data.get("user_"))
+
+
+@dataclass
+class ApiParsedMarkdownResponse(CommandResponse):
+    """Response containing parsed and formatted markdown text."""
+
+    formattedText: Optional[List[Dict[str, Any]]] = None
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "ApiParsedMarkdownResponse":
+        return cls(type="apiParsedMarkdown", formattedText=data.get("formattedText"))
+
+
+class ResponseFactory:
     """
-    Create a specific CommandResponse subclass based on the response type.
-
-    This function should be expanded as new response types are added to the system.
+    Factory class for creating appropriate response objects based on response type.
+    
+    This centralized factory handles the mapping between server response types and
+    the corresponding Python response classes.
     """
-    if not isinstance(data, dict):
-        return CommandResponse(type="unknown")
-
-    response_type = data.get("type", "unknown")
-
-    # Handle error responses
-    if response_type == "chatCmdError":
-        return CommandErrorResponse.from_dict(data)
-
-    # For other response types, the specific modules should handle them
-    return CommandResponse(type=response_type, user=data.get("user"))
+    
+    # This map will be populated by register_response_type
+    _response_map: Dict[str, Any] = {}
+    
+    @classmethod
+    def register_response_type(cls, response_type: str, response_class: Any) -> None:
+        """
+        Register a response type with its corresponding class.
+        
+        Args:
+            response_type: The response type string (e.g., "activeUser")
+            response_class: The corresponding response class
+        """
+        cls._response_map[response_type] = response_class
+    
+    @classmethod
+    def create(cls, data: Dict[str, Any]) -> CommandResponse:
+        """
+        Create a response object of the appropriate type based on the response data.
+        
+        Args:
+            data: The response data dictionary
+            
+        Returns:
+            An instance of the appropriate CommandResponse subclass
+        """
+        if not isinstance(data, dict):
+            return CommandResponse(type="unknown")
+            
+        response_type = data.get("type", "unknown")
+        
+        # Handle error responses
+        if response_type == "chatCmdError":
+            return CommandErrorResponse.from_dict(data)
+        
+        # Check if we have a registered handler for this response type
+        if response_type in cls._response_map:
+            try:
+                return cls._response_map[response_type].from_dict(data)
+            except Exception as e:
+                # If there's an error creating the specific response, log it and fall back
+                import logging
+                logging.getLogger(__name__).error(
+                    f"Error creating response for type {response_type}: {e}"
+                )
+        
+        # Fall back to generic response
+        return CommandResponse(type=response_type, user=data.get("user"))

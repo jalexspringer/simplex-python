@@ -194,13 +194,13 @@ class ChatTransport(Transport[ChatSrvRequest, ChatSrvResponse]):
         """
         # Convert to JSON and send
         data = json.dumps({"corrId": req.corr_id, "cmd": req.cmd})
-        print(f"[DEBUG] Sending command envelope: {data}")
+        # print(f"[DEBUG] Sending command envelope: {data}")
         await self._ws.write(data)
 
     async def read(self) -> ChatSrvResponse:
         # Deserialize response as needed
         msg = await self._ws.read()
-        print(f"[DEBUG] Received raw message: {msg}")
+        # print(f"[DEBUG] Received raw message: {msg}")
         if isinstance(msg, bytes):
             msg = msg.decode("utf-8")
         obj = json.loads(msg)

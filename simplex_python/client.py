@@ -19,7 +19,7 @@ from collections import OrderedDict
 
 from .queue import ABQueue
 from .commands import SimplexCommand
-from .responses import CommandResponse
+from .responses import CommandResponse, ResponseFactory
 from .transport import ChatServer, ChatTransport, ChatSrvRequest
 from .client_errors import SimplexClientError, SimplexCommandError
 
@@ -171,15 +171,18 @@ class SimplexClient:
 
         if expect_response:
             try:
-                resp = await asyncio.wait_for(fut, self._timeout)
+                raw_resp = await asyncio.wait_for(fut, self._timeout)
 
-                # Check for error responses
-                if isinstance(resp, dict) and resp.get("type") == "chatCmdError":
-                    error_info = resp.get("chatError", {})
+                # Handle error responses first, before trying to create typed responses
+                if isinstance(raw_resp, dict) and raw_resp.get("type") == "chatCmdError":
+                    error_info = raw_resp.get("chatError", {})
                     error_msg = f"Command error: {error_info.get('type', 'unknown')}"
-                    raise SimplexCommandError(error_msg, resp)
-
-                return resp
+                    raise SimplexCommandError(error_msg, raw_resp)
+                
+                # Use ResponseFactory to create the appropriate response object
+                typed_resp = ResponseFactory.create(raw_resp)
+                
+                return typed_resp
             except asyncio.TimeoutError:
                 error_msg = f"Timeout waiting for response to command: {cmd_str}"
                 raise SimplexClientError(error_msg)

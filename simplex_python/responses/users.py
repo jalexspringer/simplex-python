@@ -23,11 +23,40 @@ from .base import CommandResponse
 class ActiveUserResponse(CommandResponse):
     """Response containing active user information."""
 
+    # Store original user dict for backward compatibility
     user: Dict[str, Any] = field(default_factory=dict)
+
+    # Directly expose common user properties for fluent API
+    user_id: Optional[int] = None
+    agent_user_id: Optional[str] = None
+    local_display_name: Optional[str] = None
+    profile: Dict[str, Any] = field(default_factory=dict)
+    preferences: Dict[str, Any] = field(default_factory=dict)
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "ActiveUserResponse":
-        return cls(type="activeUser", user=data.get("user", {}))
+        user_data = data.get("user", {})
+
+        # Create the response with both the original user dict and extracted properties
+        return cls(
+            type="activeUser",
+            user=user_data,
+            user_id=user_data.get("userId"),
+            agent_user_id=user_data.get("agentUserId"),
+            local_display_name=user_data.get("localDisplayName"),
+            profile=user_data.get("profile", {}),
+            preferences=user_data.get("fullPreferences", {}),
+        )
+
+    @property
+    def display_name(self) -> Optional[str]:
+        """Get the user's display name from profile."""
+        return self.profile.get("displayName") if self.profile else None
+
+    @property
+    def full_name(self) -> Optional[str]:
+        """Get the user's full name from profile."""
+        return self.profile.get("fullName") if self.profile else None
 
 
 @dataclass
@@ -139,6 +168,29 @@ class UserContactLinkUpdatedResponse(CommandResponse):
             autoAccept=data.get("autoAccept", False),
             autoReply=data.get("autoReply"),
         )
+
+
+# User contact link subscription responses
+
+
+@dataclass
+class UserContactLinkSubscribedResponse(CommandResponse):
+    """Response when a user contact link is subscribed to."""
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "UserContactLinkSubscribedResponse":
+        return cls(type="userContactLinkSubscribed")
+
+
+@dataclass
+class UserContactLinkSubErrorResponse(CommandResponse):
+    """Response when there's an error with a user contact link subscription."""
+
+    chatError: Dict[str, Any] = field(default_factory=dict)
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "UserContactLinkSubErrorResponse":
+        return cls(type="userContactLinkSubError", chatError=data.get("chatError", {}))
 
 
 # Supporting data classes and type aliases

@@ -5,7 +5,13 @@ Provides a fluent API for user-related operations.
 """
 
 import logging
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, Dict
+
+from simplex_python.responses import (
+    ActiveUserResponse,
+    UserContactLinkResponse,
+    CommandResponse,
+)
 from ..commands import (
     ShowActiveUser,
     CreateActiveUser,
@@ -17,7 +23,6 @@ from ..commands import (
     APISetActiveUser,
     MCText,
 )
-from ..responses import CommandResponse
 from ..client_errors import SimplexCommandError
 
 if TYPE_CHECKING:
@@ -41,43 +46,41 @@ class UsersClient:
         """
         self._client = client
 
-    async def get_active(self) -> Optional[CommandResponse]:
+    async def get_active(self) -> Optional[ActiveUserResponse]:
         """
         Get the currently active user profile.
 
         Returns:
-            CommandResponse containing the user profile object, or None if no active user exists.
+            ActiveUserResponse containing the user profile object, or None if no active user exists.
 
         Raises:
             SimplexCommandError: If there was an error executing the command.
         """
         cmd = ShowActiveUser(type="showActiveUser")
         resp = await self._client.send_command(cmd)
-
-        # Check if we have an active user
-        if not resp or not isinstance(resp, dict):
-            error_msg = f"Failed to get active user: {resp.get('type') if resp else 'No response'}"
-            logger.error(error_msg)
-            raise SimplexCommandError(error_msg, resp)
-
-        if resp.get("type") == "activeUser":
-            # Convert to proper response type
-            return CommandResponse.from_dict(resp)
-        elif resp.get("type") == "chatCmdError":
-            # Special case for "no active user" which is not an error
-            error_info = resp.get("chatError", {})
+        
+        # If we got None back, it means there's no active user
+        if resp is None:
+            return None
+            
+        # Handle special case where we get a "no active user" error
+        if hasattr(resp, "type") and resp.type == "chatCmdError":
+            # Check if it's specifically the "no active user" error
             if (
-                error_info.get("type") == "error"
-                and error_info.get("errorType", {}).get("type") == "noActiveUser"
+                hasattr(resp, "chatError") 
+                and resp.chatError.get("type") == "error"
+                and resp.chatError.get("errorType", {}).get("type") == "noActiveUser"
             ):
                 return None
-
-        logger.error(
-            f"Failed to get active user: Unexpected response type {resp.get('type')}"
-        )
-        raise SimplexCommandError(
-            "Failed to get active user: Unexpected response", resp
-        )
+        
+        # If we got back a proper ActiveUserResponse, return it
+        if isinstance(resp, ActiveUserResponse):
+            return resp
+            
+        # If we received some other type, raise an error
+        error_msg = f"Failed to get active user: Unexpected response type {getattr(resp, 'type', 'unknown')}"
+        logger.error(error_msg)
+        raise SimplexCommandError(error_msg, resp)
 
     async def create(
         self,
@@ -265,7 +268,7 @@ class UsersClient:
 
         if resp.get("type") == "userContactLink":
             # Convert to proper response type
-            return CommandResponse.from_dict(resp)
+            return UserContactLinkResponse.from_dict(resp)
         elif resp.get("type") == "chatCmdError":
             # Special case for "no user contact link" which is not an error
             error_info = resp.get("chatError", {})

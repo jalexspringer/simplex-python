@@ -79,35 +79,16 @@ async def setup_bot(client: SimplexClient) -> Optional[Dict[str, Any]]:
 
     # Get or create the user address using fluent API
     address = None
-    address_response = await client.users.get_address()
-    if isinstance(address_response, CommandResponse):
-        # Extract the address from the response
-        if hasattr(address_response, "contactLink") and address_response.contactLink:
-            address = address_response.contactLink.get("connReqContact")
-            logger.info("Using existing contact address")
-    else:
-        logger.warning("Unexpected response from users.get_address")
-        # Create new address if none exists
-        create_addr_response = await client.users.create_address()
-        address_response = await client.users.get_address()
-        if isinstance(address_response, CommandResponse):
-            if (
-                hasattr(address_response, "contactLink")
-                and address_response.contactLink
-            ):
-                address = address_response.contactLink.get("connReqContact")
-
-    if not address:
-        logger.error("Could not get or create bot address.")
-        return None
+    address_response = await client.send_command("/sa")
+    address = address_response["contactLink"]["connReqContact"]
 
     logger.info(f"Bot address: {address}")
 
-    # Enable automatic acceptance of contact connections
-    await client.users.enable_auto_accept(
-        accept_incognito=True, auto_reply_text=WELCOME_MSG
-    )
-    logger.info("Auto-accept enabled for contacts with welcome message")
+    # # Enable automatic acceptance of contact connections
+    # await client.users.enable_auto_accept(
+    #     accept_incognito=True, auto_reply_text=WELCOME_MSG
+    # )
+    # logger.info("Auto-accept enabled for contacts with welcome message")
 
     return user
 
