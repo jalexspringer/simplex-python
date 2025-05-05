@@ -21,35 +21,11 @@
 
 ## SDK Architecture & Design Philosophy
 
-### File Structure:
-```
-simplex_python/
-├── __init__.py
-├── client.py           # Main client interface
-├── transport.py        # Transport abstraction
-├── queue.py            # Async bounded queue implementation
-├── response.py         # Response type definitions
-├── cmds/           # Command type definitions
-│   ├── __init__.py
-│   ├── base.py
-│   ├── chats.py
-│   ├── commands.py     # Re-exports from all command modules
-│   ├── users.py
-│   └── ...
-├── clients/            # Domain-specific client implementations
-│   ├── __init__.py
-│   ├── users.py
-│   ├── chats.py
-│   ├── groups.py
-│   └── ...
-└── errors.py           # Error types
-```
 
 ### Key Design Approaches:
 
 1. **High-Level Client with Domain-Specific Components**: 
    - Main `SimplexClient` in client.py serves as the primary entry point
-   - Domain-specific clients (users, groups, chats) are exposed as properties
    - Each domain encapsulates related operations in a fluent API
 
 2. **Strongly-Typed Command and Response System**:

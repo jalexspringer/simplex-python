@@ -5,7 +5,7 @@ from enum import Enum
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from simplex_python.client_errors import SimplexClientError
-from simplex_python.responses.base import DynamicResponse
+from simplex_python.responses import DynamicResponse
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"

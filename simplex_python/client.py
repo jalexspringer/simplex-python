@@ -17,26 +17,15 @@ import logging
 from typing import AsyncGenerator, Optional, TYPE_CHECKING, Any, Dict, Union
 from collections import OrderedDict
 
-from simplex_python.clients.account import AccountClient
-from simplex_python.responses.base import DynamicResponse
+from simplex_python.account import AccountClient
+from simplex_python.responses import DynamicResponse
 
 from .queue import ABQueue
-from .commands import SimplexCommand
-from .responses import CommandResponse, ResponseFactory
 from .transport import ChatServer, ChatTransport, ChatSrvRequest
 from .client_errors import (
     SimplexClientError,
-    SimplexCommandError,
     SimplexConnectionError,
 )
-
-if TYPE_CHECKING:
-    from .clients.users import UsersClient
-    from .clients.groups import GroupsClient
-    from .clients.chats import ChatsClient
-    from .clients.files import FilesClient
-    from .clients.database import DatabaseClient
-    from .clients.connections import ConnectionsClient
 
 
 # Set up logger
@@ -79,7 +68,7 @@ class SimplexClient:
         self._timeout = timeout
         self._qsize = qsize
         self._transport: Optional[ChatTransport] = None
-        self._event_q: Optional[ABQueue[CommandResponse]] = None
+        self._event_q: Optional[ABQueue[DynamicResponse]] = None
         self._pending: OrderedDict[str, asyncio.Future] = OrderedDict()
         self._recv_task: Optional[asyncio.Task] = None
         self._connected = False
@@ -110,7 +99,7 @@ class SimplexClient:
             self._transport = await ChatTransport.connect(
                 self._server, timeout=self._timeout, qsize=self._qsize
             )
-            self._event_q = ABQueue[CommandResponse](self._qsize)
+            self._event_q = ABQueue[DynamicResponse](self._qsize)
             self._recv_task = asyncio.create_task(self._recv_loop())
             self._connected = True
             logger.info("Connected to chat server")
@@ -159,117 +148,6 @@ class SimplexClient:
         logger.info(f"Command: {cmd}: Response type: {response.res_type}")
         return response
 
-    async def send_command(
-        self,
-        cmd: Union[SimplexCommand, Dict[str, Any]],
-        expect_response: bool = True,
-    ) -> Optional[CommandResponse]:
-        """
-        Send a command to the chat server and optionally await a response.
-
-        Args:
-            cmd: The command object to send (SimplexCommand or compatible dict).
-            expect_response: If True, await and return the response matching the corr_id.
-
-        Returns:
-            The response data, or None if not expecting a response.
-
-        Raises:
-            SimplexClientError: If not connected or timeout waiting for response.
-            SimplexCommandError: If the command results in an error response.
-        """
-        if not self._transport or not self._connected:
-            raise SimplexClientError(
-                "Not connected to chat server. Use `async with SimplexClient(...)`"
-            )
-
-        # Generate sequential numeric ID
-        self._client_corr_id += 1
-        corr_id = str(self._client_corr_id)
-        logger.debug(f"Generated correlation ID: {corr_id}")
-
-        # Create a command string using the command's to_cmd_string method
-        if hasattr(cmd, "to_cmd_string"):
-            cmd_str = cmd.to_cmd_string()
-        else:
-            cmd_str = str(cmd)
-
-        logger.debug(f"Sending command: {cmd_str}")
-
-        # Create a ChatSrvRequest with the correlation ID and command string
-        request = ChatSrvRequest(corr_id=corr_id, cmd=cmd_str)
-
-        if expect_response:
-            fut = asyncio.get_running_loop().create_future()
-            self._pending[corr_id] = fut
-
-        await self._transport.write(request)
-
-        if expect_response:
-            try:
-                raw_resp = await asyncio.wait_for(fut, self._timeout)
-                # print(raw_resp)
-                # Handle error responses
-                if raw_resp.get("type") == "chatCmdError":
-                    error_info = raw_resp.get("chatError", {})
-                    error_type = error_info.get("type", "unknown")
-                    print("ERROR: ", error_info)
-
-                    # Provide more specific error information for store errors
-                    if error_type == "errorStore" and isinstance(
-                        error_info.get("storeError"), dict
-                    ):
-                        store_error = error_info.get("storeError", {})
-                        store_error_type = store_error.get("type")
-
-                        # Convert raw response to a StoreErrorType for enhanced detection
-                        from .responses.base import StoreErrorType
-
-                        store_error_obj = StoreErrorType(
-                            type="errorStore", storeError=store_error
-                        )
-
-                        # For certain error types, return a response object instead of raising an exception
-                        # This allows domain-specific clients to handle these errors in a custom way
-                        if (
-                            store_error_obj.is_contact_link_not_found_error()
-                            or store_error_obj.is_duplicate_contact_link_error()
-                        ):
-                            logger.debug(
-                                f"Returning store error as response: {store_error_type}"
-                            )
-                            return store_error_obj
-
-                        # Check for specific store error types and provide helpful suggestions
-                        if store_error_obj.is_contact_link_not_found_error():
-                            error_msg = "Command error: No chat address exists. Create one first with client.users.create_profile_address()"
-                        elif store_error_obj.is_duplicate_contact_link_error():
-                            error_msg = "Command error: Chat address already exists. Use client.users.show_profile_address() to view it"
-                        elif store_error_type:
-                            error_msg = (
-                                f"Command error: {error_type} - {store_error_type}"
-                            )
-                        else:
-                            error_msg = f"Command error: {error_type}"
-                    elif error_type == "error":
-                        error_msg = f"ChatError: {error_info['errorType']['type']}"
-                    else:
-                        error_msg = f"Command error: {error_type}"
-
-                    raise SimplexCommandError(error_msg, raw_resp)
-
-                # Use ResponseFactory to create the appropriate response object
-                typed_resp = ResponseFactory.create(raw_resp)
-
-                return typed_resp
-            except asyncio.TimeoutError:
-                error_msg = f"Timeout waiting for response to command: {cmd_str}"
-                raise SimplexClientError(error_msg)
-            finally:
-                self._pending.pop(corr_id, None)
-
-        return None
-
     async def _recv_loop(self):
         """Background task that processes incoming messages from the transport."""
         assert self._transport is not None and self._event_q is not None
@@ -297,7 +175,7 @@ class SimplexClient:
             logger.exception(f"Exception in recv_loop: {e}")
             self._connected = False
 
-    async def events(self) -> AsyncGenerator[CommandResponse, None]:
+    async def events(self) -> AsyncGenerator[DynamicResponse, None]:
         """
         Async generator yielding server events (responses not matched to a request).
 
@@ -326,62 +204,8 @@ class SimplexClient:
     @property
     def account(self) -> AccountClient:
         if self._account_client is None:
-            from .clients.account import AccountClient
+            from .account import AccountClient
 
             self._account_client = AccountClient(self)
             # Don't call async methods from property getter
         return self._account_client
-
-    @property
-    def users(self) -> "UsersClient":
-        """Access user-related operations with a fluent API."""
-        if self._users_client is None:
-            from .clients.users import UsersClient
-
-            self._users_client = UsersClient(self)
-        return self._users_client
-
-    @property
-    def groups(self) -> "GroupsClient":
-        """Access group-related operations with a fluent API."""
-        if self._groups_client is None:
-            from .clients.groups import GroupsClient
-
-            self._groups_client = GroupsClient(self)
-        return self._groups_client
-
-    @property
-    def chats(self) -> "ChatsClient":
-        """Access chat-related operations with a fluent API."""
-        if self._chats_client is None:
-            from .clients.chats import ChatsClient
-
-            self._chats_client = ChatsClient(self)
-        return self._chats_client
-
-    @property
-    def files(self) -> "FilesClient":
-        """Access file-related operations with a fluent API."""
-        if self._files_client is None:
-            from .clients.files import FilesClient
-
-            self._files_client = FilesClient(self)
-        return self._files_client
-
-    @property
-    def database(self) -> "DatabaseClient":
-        """Access database-related operations with a fluent API."""
-        if self._database_client is None:
-            from .clients.database import DatabaseClient
-
-            self._database_client = DatabaseClient(self)
-        return self._database_client
-
-    @property
-    def connections(self) -> "ConnectionsClient":
-        """Access connection-related operations with a fluent API."""
-        if self._connections_client is None:
-            from .clients.connections import ConnectionsClient
-
-            self._connections_client = ConnectionsClient(self)
-        return self._connections_client
