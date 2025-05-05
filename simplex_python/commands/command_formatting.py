@@ -39,7 +39,11 @@ def cmd_string(cmd: BaseCommand) -> str:
             return "/u"
         case "createActiveUser":
             # Use to_dict method for profile if available
-            profile = cmd.profile.to_dict() if hasattr(cmd.profile, 'to_dict') else cmd.profile
+            profile = (
+                cmd.profile.to_dict()
+                if hasattr(cmd.profile, "to_dict")
+                else cmd.profile
+            )
             user = {
                 "profile": profile,
                 "sameServers": cmd.sameServers,

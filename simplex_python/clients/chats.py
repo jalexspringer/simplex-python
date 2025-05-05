@@ -144,6 +144,7 @@ class ChatsClient:
         resp = await self._client.send_command(cmd)
 
         # Check response type
+        print(resp)
         if not resp or not isinstance(resp, dict) or resp.get("type") != "apiChats":
             error_msg = (
                 f"Failed to get chats: {resp.get('type') if resp else 'No response'}"
@@ -366,8 +367,9 @@ class ChatsClient:
 
         cmd = APISendMessage(
             type="apiSendMessage",
+            chatType=ChatType.DIRECT,
             chatId=chat_id,
-            content=content,
+            messages=[content],
         )
 
         resp = await self._client.send_command(cmd)

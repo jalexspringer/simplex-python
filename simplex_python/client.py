@@ -17,6 +17,9 @@ import logging
 from typing import AsyncGenerator, Optional, TYPE_CHECKING, Any, Dict, Union
 from collections import OrderedDict
 
+from simplex_python.clients.account import AccountClient
+from simplex_python.responses.base import DynamicResponse
+
 from .queue import ABQueue
 from .commands import SimplexCommand
 from .responses import CommandResponse, ResponseFactory
@@ -84,6 +87,7 @@ class SimplexClient:
 
         # Lazy-loaded domain-specific client instances
         self._users_client = None
+        self._account_client = None
         self._groups_client = None
         self._chats_client = None
         self._files_client = None
@@ -141,6 +145,20 @@ class SimplexClient:
         self._pending.clear()
         logger.info("Disconnected from chat server")
 
+    async def send_cmd(self, cmd: str) -> DynamicResponse:
+        self._client_corr_id += 1
+        corr_id = str(self._client_corr_id)
+        request = ChatSrvRequest(corr_id=corr_id, cmd=cmd)
+        await self._transport.write(request)
+        fut = asyncio.get_running_loop().create_future()
+        self._pending[corr_id] = fut
+        raw_resp = await asyncio.wait_for(fut, self._timeout)
+        response = DynamicResponse.from_dict(raw_resp)
+        if len(cmd) > 15:
+            cmd = f"{cmd[:15]}..."
+        logger.info(f"Command: {cmd}: Response type: {response.res_type}")
+        return response
+
     async def send_command(
         self,
         cmd: Union[SimplexCommand, Dict[str, Any]],
@@ -190,7 +208,7 @@ class SimplexClient:
         if expect_response:
             try:
                 raw_resp = await asyncio.wait_for(fut, self._timeout)
-
+                # print(raw_resp)
                 # Handle error responses
                 if raw_resp.get("type") == "chatCmdError":
                     error_info = raw_resp.get("chatError", {})
@@ -304,6 +322,15 @@ class SimplexClient:
     def connected(self) -> bool:
         """Whether the client is currently connected."""
         return self._connected
+
+    @property
+    def account(self) -> AccountClient:
+        if self._account_client is None:
+            from .clients.account import AccountClient
+
+            self._account_client = AccountClient(self)
+            # Don't call async methods from property getter
+        return self._account_client
 
     @property
     def users(self) -> "UsersClient":

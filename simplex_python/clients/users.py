@@ -5,13 +5,14 @@ Provides a fluent API for user-related operations.
 """
 
 import logging
-from typing import Optional, TYPE_CHECKING, Union
+from typing import Optional, TYPE_CHECKING, Union, Dict, Any
 
 from simplex_python.responses import (
     ActiveUserResponse,
     UsersListResponse,
     UserProfileUpdatedResponse,
     UserProfileNoChangeResponse,
+    CommandResponse,
 )
 from simplex_python.responses.base import StoreErrorType, CmdOkResponse
 from ..commands import (
@@ -673,3 +674,57 @@ class UsersClient:
             # Switch back to originally active user if different
             if current_active and current_active.user_id != user_id:
                 await self.set_active(current_active.user_id)
+
+    async def enable_address_auto_accept(
+        self, accept_incognito: bool = True, auto_reply: Optional[Dict[str, Any]] = None
+    ) -> "CommandResponse":
+        """
+        Enable automatic acceptance of connection requests for the active user.
+
+        This allows the client to automatically accept incoming contact requests,
+        which is especially useful for bots or automated services.
+
+        Args:
+            accept_incognito: Whether to accept requests from incognito contacts (default: True).
+            auto_reply: Optional automatic reply message to send when accepting requests.
+
+        Returns:
+            CommandResponse containing the result of the operation.
+
+        Raises:
+            SimplexCommandError: If there was an error executing the command.
+        """
+        # Create the autoAccept configuration
+        from ..commands.users import AddressAutoAccept
+
+        # Create a dictionary for the autoAccept field
+        auto_accept_dict = {
+            "acceptIncognito": accept_incognito
+        }
+        
+        # Only add autoReply if it's provided
+        if auto_reply:
+            auto_accept_dict["autoReply"] = auto_reply
+
+        # Using addressAutoAccept command type (not apiAddressAutoAccept)
+        # This matches the JS client implementation
+        cmd = AddressAutoAccept(
+            type="addressAutoAccept",
+            autoAccept=auto_accept_dict
+        )
+
+        resp = await self._client.send_command(cmd)
+
+        # Check response type
+        if resp is None:
+            error_msg = "Failed to enable auto-accept: No response"
+            logger.error(error_msg)
+            raise SimplexCommandError(error_msg, resp)
+            
+        # The expected response type is "userContactLinkUpdated" according to JS implementation
+        if hasattr(resp, "type") and resp.type != "userContactLinkUpdated":
+            error_msg = f"Failed to enable auto-accept: Unexpected response type {resp.type}"
+            logger.error(error_msg)
+            raise SimplexCommandError(error_msg, resp)
+
+        return resp

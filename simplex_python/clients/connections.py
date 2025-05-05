@@ -323,19 +323,19 @@ class ConnectionsClient:
 
         resp = await self._client.send_command(cmd)
 
-        # Check response type
-        if not resp or not isinstance(resp, dict):
-            error_msg = (
-                f"Failed to connect: {resp.get('type') if resp else 'No response'}"
-            )
+        # Check response type - handle both dict and response objects
+        if resp is None:
+            error_msg = "Failed to connect: No response"
             logger.error(error_msg)
             raise SimplexCommandError(error_msg, resp)
-
-        # Expected response varies depending on the type of connection
+        
+        # Already a typed response object
+        if not isinstance(resp, dict):
+            return resp
+            
+        # Handle dictionary response
         # Convert to proper response type
-        chat_response = (
-            CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
-        )
+        chat_response = CommandResponse.from_dict(resp) if isinstance(resp, dict) else None
 
         return chat_response or resp
 

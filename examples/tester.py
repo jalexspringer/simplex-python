@@ -1,101 +1,121 @@
-#!/usr/bin/env python3
 """
-Example usage of SimplexClient showing user operations.
-
-Demonstrates:
-1. Connecting to a Simplex server
-2. Getting the active user with fluent API
-3. Listing all users and accessing user properties
-4. Changing the active user
-5. Creating a new user account
-6. Configuring user profile address
-7. Deleting a user account
+Test script for simplex_python SDK.
 """
 
 import asyncio
 import logging
-import random
-import string
-from typing import Optional
 from simplex_python.client import SimplexClient
-from simplex_python.responses import (
-    ActiveUserResponse,
-    UserProfileUpdatedResponse,
-    UserProfileNoChangeResponse,
-)
-from simplex_python.responses.base import CmdOkResponse
-from simplex_python.client_errors import SimplexCommandError
+from pprint import pprint
 
-# Set up logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+from simplex_python.clients.account import ChatType
 
-# Server URL - replace with your actual server URL
-SERVER_URL = "ws://localhost:5225"  # Default local development server
+
+async def setup_bot(server_address: str) -> SimplexClient:
+    """Set up a bot with the given port and display name."""
+    client = SimplexClient(server_address)
+    await client.connect()
+
+    # Show user info
+    await client.account.initialize()
+
+    print(
+        f"Connected: {client.account.active_user_display} --- ID: {client.account.active_user_id}"
+    )
+
+    return client
+
+
+async def get_bot_clients():
+    # Create two bots on different ports
+    print("Setting up Bot 1...")
+    SERVER_URL = "ws://localhost:5225"
+    bot1 = await setup_bot(SERVER_URL)
+
+    print("Setting up Bot 2...")
+    SERVER_URL = "ws://localhost:5226"
+    bot2 = await setup_bot(SERVER_URL)
+
+    for b in [bot1, bot2]:
+        await b.account.remove_connection(1)
+        await b.account.remove_connection(2)
+        await b.account.remove_connection(3)
+
+    return bot1, bot2
+
+
+async def connect_the_bots(bot1, bot2):
+    # Generate connection link from Bot 1
+    print("Generating connection link from Bot 1...")
+    conn_link_resp = await bot1.account.get_onetime_connection_link()
+
+    print(f"Bot 1 connection link: {conn_link_resp}")
+
+    # Bot 2 connects to Bot 1 using the link
+    print("Bot 2 connecting to Bot 1...")
+    connect_resp = await bot2.account.connect_with_link(conn_link_resp)
 
 
 async def main():
-    """Connect to the SimplexClient and perform user operations."""
-    print("Connecting to Simplex server...")
+    # Set up logging
+    logging.basicConfig(level=logging.INFO)
+    bot1, bot2 = await get_bot_clients()
 
-    # Use the context manager to handle connection and cleanup
-    async with SimplexClient(SERVER_URL) as client:
-        print("Connected to Simplex server")
+    await connect_the_bots(bot1, bot2)
 
-        # --- Demonstrate Listing Users ---
-        print("\n=== Found", await client.users.list_users())
-        await client.users.create_active_user("ME!", "REALLY ME")
-        # --- Demonstrate User Deletion ---
-        # List users before deletion
-        users_before = await client.users.list_users()
-        print(f"\n=== Found {users_before} users before deletion ===")
+    # # Wait for the connection to propogate
+    # # 2 seconds seems to be enough on a local SMP server
+    await asyncio.sleep(2)
 
-        test_user_id = 2
-        print(f"\n=== Deleting user (ID: {test_user_id}) ===")
-        try:
-            # Make sure we're not deleting the active user to avoid complications
-            current_active = await client.users.get_active()
-            if current_active.user_id == test_user_id:
-                # Find another user to switch to
-                for user in users_before:
-                    if user.user_id != test_user_id:
-                        print(f"Switching to user {user.display_name} before deletion")
-                        await client.users.set_active(user.user_id)
-                        break
+    # Get contact list for Bot 1
+    connections = await bot2.account.list_connections()
+    await bot1.account.create_group("runTheStreets", "No Really We Run")
 
-            # Delete the test user
-            result = await client.users.delete_user(test_user_id)
+    # Print a more compact view of the connections
+    direct_connections = connections["direct"]
+    groups = connections["groups"]
+    ds_name = ""
 
-            # Handle both possible success response types
-            if isinstance(result, ActiveUserResponse):
-                print(f"User deleted, new active user is: {result.display_name}")
-            elif isinstance(result, CmdOkResponse):
-                print("User deleted successfully")
-            else:
-                print(
-                    f"User deletion completed with response type: {type(result).__name__}"
-                )
+    print(f"\nFound {len(groups)} groups:")
+    for group in groups:
+        ds_name = group["display_name"]
+        pprint(group)
+        print(f"Group: {group['display_name']} (ID: {group['group_id']})")
+        print(f"Membership Status: {group['membership_status']}")
+        print(
+            f"  Unread: {group['unread_count']} messages, {group['unread_mentions']} mentions"
+        )
+        await bot1.account.send_message(
+            group["display_name"],
+            f"Hello from {bot1.account.active_user_display}",
+            ChatType.GROUP,
+        )
+        if group.get("last_message"):
+            print(
+                f"  Last message: {group['last_message']} ({group['last_message_ts']})"
+            )
+            print(f"  {group['last_message_status']}")
 
-            # Verify deletion by listing users again
-            users_after = await client.users.list_users()
-            print(f"\n=== Found {len(users_after)} users after deletion ===")
+        if group["membership_status"] == "invited":
+            await bot2.account.accept_group_invite(group["display_name"])
+        await bot2.account.send_message(ds_name, "And now bot2 is here", ChatType.GROUP)
 
-            # Check if user still exists (shouldn't, but verify)
-            for user in users_after:
-                if user.user_id == test_user_id:
-                    print(
-                        f"Warning: User with ID {test_user_id} still exists after deletion"
-                    )
-                    break
-            else:
-                print(f"Success: User with ID {test_user_id} was deleted completely")
+        print(f"\nFound {len(direct_connections)} direct connections:")
 
-        except SimplexCommandError as e:
-            if "userUnknown" in str(e):
-                print(f"Error: User with ID {test_user_id} doesn't exist")
-            else:
-                print(f"Error deleting user: {e}")
+    for conn in direct_connections:
+        print(f"Contact: {conn['display_name']} (ID: {conn['contact_id']})")
+        print(f"  Unread: {conn['unread_count']} messages")
+        if conn.get("last_message"):
+            print(f"  Last message: {conn['last_message']} ({conn['last_message_ts']})")
+            print(f"  {conn['last_message_status']}")
+            await bot1.account.send_message(
+                conn["display_name"], f"Hello from {bot1.account.active_user_display}"
+            )
+            await bot1.account.add_user_to_group(ds_name, conn["display_name"])
+
+    # Clean up
+    await bot1.disconnect()
+    await bot2.disconnect()
+    print("Test completed successfully!")
 
 
 if __name__ == "__main__":

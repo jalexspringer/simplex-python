@@ -18,6 +18,47 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Any, Optional
 from enum import Enum
 
+from simplex_python.client_errors import SimplexClientError
+
+
+@dataclass
+class DynamicResponse:
+    """
+    A response class that automatically extracts the second key-value pair
+    from a response dictionary and assigns it to a data attribute.
+
+    Attributes:
+        res_type: The response type string.
+        raw_resp: The original raw response dictionary.
+        data: The extracted data from the second key-value pair.
+    """
+
+    res_type: str
+    raw_response: Dict
+    data: Dict[str, Any] = field(default_factory=dict)
+
+    @classmethod
+    def from_dict(cls, resp_dict: Dict[str, Any]) -> "DynamicResponse":
+        """
+        Create a DynamicResponse from a dictionary.
+
+        Args:
+            resp_dict: Response dictionary with 'type' and a second key-value pair.
+
+        Returns:
+            A DynamicResponse object with the data extracted.
+        """
+        type_val = resp_dict.get("type", "unknown")
+        if "Error" in type_val:
+            raise SimplexClientError(
+                {"ERROR": f"{type_val} - {resp_dict}"},
+            )
+        # Find the second key that isn't 'type'
+        data_key = next((k for k in resp_dict.keys() if k != "type"), None)
+        data_val = resp_dict.get(data_key, {}) if data_key else {}
+
+        return cls(res_type=type_val, raw_response=resp_dict, data=data_val)
+
 
 # Base response structure - all responses will be parsed into this
 @dataclass
@@ -246,7 +287,10 @@ class StoreErrorType(CommandError):
 
         # For robustness, also check the string representation
         error_str = str(self.storeError)
-        return "SEDuplicateContactLink" in error_str or "you already have chat address" in error_str.lower()
+        return (
+            "SEDuplicateContactLink" in error_str
+            or "you already have chat address" in error_str.lower()
+        )
 
     def is_contact_link_not_found_error(self) -> bool:
         """Check if this is a 'contact link not found' error.
@@ -271,7 +315,11 @@ class StoreErrorType(CommandError):
 
         # For robustness, also check the string representation
         error_str = str(self.storeError)
-        return "SEUserContactLinkNotFound" in error_str or "userContactLinkNotFound" in error_str or "no chat address" in error_str.lower()
+        return (
+            "SEUserContactLinkNotFound" in error_str
+            or "userContactLinkNotFound" in error_str
+            or "no chat address" in error_str.lower()
+        )
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "StoreErrorType":
@@ -349,6 +397,7 @@ class ResponseFactory:
             except Exception as e:
                 # If there's an error creating the specific response, log it and fall back
                 import logging
+
                 logging.getLogger(__name__).error(
                     f"Error creating response for type {response_type}: {e}"
                 )

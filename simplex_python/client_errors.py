@@ -7,8 +7,6 @@ allowing for more specific error details and response context when operations fa
 
 from typing import Optional
 
-from .responses import CommandResponse
-
 
 class SimplexCommandError(Exception):
     """
@@ -18,7 +16,7 @@ class SimplexCommandError(Exception):
     for further inspection when available.
     """
 
-    def __init__(self, message: str, response: Optional[CommandResponse] = None):
+    def __init__(self, message: str, response=None):
         """
         Initialize a new SimplexCommandError.
 
@@ -44,15 +42,17 @@ class SimplexClientError(Exception):
 class SimplexConnectionError(SimplexClientError):
     """
     Exception raised for connection errors in SimplexClient.
-    
+
     Provides detailed information about connection issues, including
     suggestions for common problems like server not running.
     """
-    
-    def __init__(self, message: str, url: str, original_error: Optional[Exception] = None):
+
+    def __init__(
+        self, message: str, url: str, original_error: Optional[Exception] = None
+    ):
         """
         Initialize a new SimplexConnectionError.
-        
+
         Args:
             message: Human-readable error description
             url: The URL that failed to connect
@@ -60,22 +60,24 @@ class SimplexConnectionError(SimplexClientError):
         """
         self.url = url
         self.original_error = original_error
-        
+
         # Build a detailed error message with helpful suggestions
         detailed_message = f"Failed to connect to SimpleX server at {url}: {message}"
-        
+
         # Add common troubleshooting tips
         detailed_message += "\n\nPossible causes:"
-        detailed_message += "\n- SimpleX Chat server is not running at the specified address and port"
+        detailed_message += (
+            "\n- SimpleX Chat server is not running at the specified address and port"
+        )
         detailed_message += "\n- Network connectivity issues"
         detailed_message += "\n- Incorrect host or port in the URL"
-        
+
         detailed_message += "\n\nTroubleshooting steps:"
         detailed_message += "\n1. Verify the SimpleX Chat server is running"
         detailed_message += "\n2. Check the host and port in your connection URL"
         detailed_message += "\n3. Ensure there are no firewall or network restrictions"
-        
+
         if original_error:
             detailed_message += f"\n\nOriginal error: {original_error}"
-            
+
         super().__init__(detailed_message)
