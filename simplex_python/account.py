@@ -308,7 +308,7 @@ class AccountClient:
             List[Dict[str, Any]]: List of chat items (messages) for the specified user.
                 Returns an empty list if no chat items are found.
         """
-        cmd = f"/tail {user_id}"
+        cmd = f"/tail {'@' if chat_type == 'direct' else '#'}{user_id}"
         response: DynamicResponse = await self._client.send_cmd(cmd)
 
         # Extract chat items from the response
