@@ -23,6 +23,7 @@ class ChatType(str, Enum):
     DIRECT = "@"
     GROUP = "#"
     CONTACT_REQUEST = "<@"
+    NONE = ""
 
 
 class AccountClient:
@@ -294,7 +295,7 @@ class AccountClient:
         return groups
 
     async def get_chat(
-        self, user_id: str, chat_type: str = "direct"
+        self, user_id: str, chat_type: ChatType = ChatType.DIRECT, num_chats: int = 20
     ) -> List[Dict[str, Any]]:
         """Get details for all chat items for a specific user ID.
 
@@ -308,7 +309,7 @@ class AccountClient:
             List[Dict[str, Any]]: List of chat items (messages) for the specified user.
                 Returns an empty list if no chat items are found.
         """
-        cmd = f"/tail {'@' if chat_type == 'direct' else '#'}{user_id}"
+        cmd = f"/tail {chat_type.value}{user_id} {num_chats}"
         response: DynamicResponse = await self._client.send_cmd(cmd)
 
         # Extract chat items from the response
