@@ -410,6 +410,10 @@ class AccountClient:
             return None
         return response
 
+    async def add_connection(self, conn_link: str):
+        cmd = f"/c {conn_link}"
+        response: DynamicResponse = await self._client.send_cmd(cmd)
+
     async def create_group(
         self, display_name: str, full_name: str = "", image: str = None
     ) -> DynamicResponse:
