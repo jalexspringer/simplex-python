@@ -135,7 +135,7 @@ async def main() -> None:
         # await bot.account.create_user(BOT_DISPLAY_NAME, BOT_FULL_NAME)
 
         # Start processing events
-        print(await bot.account.active_user_contact_link)
+        print(bot.account.active_user_contact_link)
         await process_events(bot)
 
     except Exception as e:
